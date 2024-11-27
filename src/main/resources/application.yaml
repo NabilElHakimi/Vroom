@@ -1,0 +1,20 @@
+
+spring:
+  application:
+    name: Vroom
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    enabled: false
+    change-log: db/changelog/master.yaml
+  docker:
+    compose:
+      file: src/main/docker/compose.yaml
+      enabled: true
+      lifecycle-management: start-only
+server:
+  port: 8082
