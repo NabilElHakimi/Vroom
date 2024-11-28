@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @Setter
 @Getter
-public class Model {
+public class Modul {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)

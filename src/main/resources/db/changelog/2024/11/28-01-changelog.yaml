@@ -1,0 +1,306 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1732820157350-1
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: article_images_seq
+            startValue: 1
+  - changeSet:
+      id: 1732820157350-2
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: article_seq
+            startValue: 1
+  - changeSet:
+      id: 1732820157350-3
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: city_seq
+            startValue: 1
+  - changeSet:
+      id: 1732820157350-4
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: country_seq
+            startValue: 1
+  - changeSet:
+      id: 1732820157350-5
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: likes_seq
+            startValue: 1
+  - changeSet:
+      id: 1732820157350-6
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: mark_seq
+            startValue: 1
+  - changeSet:
+      id: 1732820157350-7
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: modul_seq
+            startValue: 1
+  - changeSet:
+      id: 1732820157350-8
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: user_seq
+            startValue: 1
+  - changeSet:
+      id: 1732820157350-9
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_article
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: telephone
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: price
+                  type: DOUBLE
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_published
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_archived
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: INT
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
+            tableName: article
+  - changeSet:
+      id: 1732820157350-10
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_article_images
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: image_url
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: DATETIME
+            tableName: article_images
+  - changeSet:
+      id: 1732820157350-11
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_city
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_at
+                  type: DATETIME
+              - column:
+                  name: created_at
+                  type: DATETIME
+            tableName: city
+  - changeSet:
+      id: 1732820157350-12
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_country
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_at
+                  type: DATETIME
+              - column:
+                  name: created_at
+                  type: DATETIME
+            tableName: country
+  - changeSet:
+      id: 1732820157350-13
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_likes
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: DATETIME
+            tableName: likes
+  - changeSet:
+      id: 1732820157350-14
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_mark
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_at
+                  type: DATETIME
+              - column:
+                  name: created_at
+                  type: DATETIME
+            tableName: mark
+  - changeSet:
+      id: 1732820157350-15
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_modul
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_at
+                  type: DATETIME
+              - column:
+                  name: created_at
+                  type: DATETIME
+            tableName: modul
+  - changeSet:
+      id: 1732820157350-16
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_user
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: role
+                  type: SMALLINT
+              - column:
+                  name: email_verification_code
+                  type: VARCHAR(255)
+              - column:
+                  name: verification_code_expires_at
+                  type: TIME
+              - column:
+                  constraints:
+                    nullable: false
+                  name: enabled
+                  type: BOOLEAN
+              - column:
+                  name: created_at
+                  type: TIME
+              - column:
+                  name: updated_at
+                  type: TIME
+            tableName: user
+
