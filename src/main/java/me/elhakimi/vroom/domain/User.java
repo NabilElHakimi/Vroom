@@ -1,10 +1,8 @@
 package me.elhakimi.vroom.domain;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import me.elhakimi.vroom.domain.enums.Role;
-
 import java.time.LocalTime;
 
 @Entity
@@ -22,11 +20,12 @@ public class User {
     private String last_name;
     private String email;
     private String password;
-    private boolean enabled;
     private Role role;
     private String email_verification_code;
     private LocalTime verification_code_expiresAt ;
+    private boolean enabled;
     private LocalTime created_at ;
     private LocalTime updated_at ;
 
 }
+

@@ -12,14 +12,13 @@ import java.time.LocalDateTime;
 @Builder
 @Setter
 @Getter
-public class Mark {
+public class Model {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)
     private Long id;
 
     private String name;
-
     private LocalDateTime updated_at;
     private LocalDateTime created_at;
 
