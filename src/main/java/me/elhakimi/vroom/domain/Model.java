@@ -1,5 +1,6 @@
 package me.elhakimi.vroom.domain;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,13 +12,22 @@ import java.time.LocalDateTime;
 @Builder
 @Setter
 @Getter
-public class Article_Images {
+public class Model {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)
     private Long id;
 
-    private String image_url;
+    private String name;
+
+    @OneToOne(mappedBy = "article")
+    private Article article;
+
+    @ManyToOne
+    private Mark mark;
+
+    private LocalDateTime updated_at;
     private LocalDateTime created_at;
+
 
 }

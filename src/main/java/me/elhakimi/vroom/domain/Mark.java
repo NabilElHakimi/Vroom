@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -19,6 +20,9 @@ public class Mark {
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy = "model")
+    private List<Model> models;
 
     private LocalDateTime updated_at;
     private LocalDateTime created_at;

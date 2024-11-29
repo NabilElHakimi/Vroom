@@ -1,6 +1,5 @@
 package me.elhakimi.vroom.domain;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,15 +11,16 @@ import java.time.LocalDateTime;
 @Builder
 @Setter
 @Getter
-public class Modul {
+public class ArticleImages {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)
     private Long id;
 
-    private String name;
-    private LocalDateTime updated_at;
-    private LocalDateTime created_at;
+    @ManyToOne
+    private Article article;
 
+    private String image_url;
+    private LocalDateTime created_at;
 
 }

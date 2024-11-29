@@ -19,8 +19,14 @@ public class City {
     private Long id;
 
     private String name;
+
+    // Remove mappedBy because this class owns the relationship
+    @OneToOne
+    private Article article;
+
+    @ManyToOne
+    private Country country;
+
     private LocalDateTime updated_at;
     private LocalDateTime created_at;
-
-
 }

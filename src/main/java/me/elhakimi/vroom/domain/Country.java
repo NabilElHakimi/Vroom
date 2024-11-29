@@ -19,6 +19,10 @@ public class Country {
     private Long id;
 
     private String name;
+
+    @ManyToOne
+    private City city;
+
     private LocalDateTime updated_at;
     private LocalDateTime created_at;
 

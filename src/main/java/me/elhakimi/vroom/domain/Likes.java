@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -14,9 +15,11 @@ import java.time.LocalDateTime;
 public class Likes {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(nullable = false)
     private Long id;
 
-    private LocalDateTime created_at;
+    @ManyToOne
+    private Article article; // This matches mappedBy in the Article class
 
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

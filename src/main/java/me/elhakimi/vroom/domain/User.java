@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import me.elhakimi.vroom.domain.enums.Role;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -24,6 +25,13 @@ public class User {
     private String email_verification_code;
     private LocalTime verification_code_expiresAt ;
     private boolean enabled;
+
+    @OneToMany(mappedBy = "article")
+    private List<Article> articles;
+
+    @OneToMany(mappedBy = "likes")
+    private List<Likes> likes;
+
     private LocalTime created_at ;
     private LocalTime updated_at ;
 

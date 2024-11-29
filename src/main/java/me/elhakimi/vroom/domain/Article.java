@@ -1,11 +1,9 @@
 package me.elhakimi.vroom.domain;
 
-
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -18,15 +16,30 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)
     private Long id;
+
     private String title;
     private String description;
     private String telephone;
     private double price;
-    private boolean is_published;
-    private boolean is_archived;
+    private boolean isPublished;
+    private boolean isArchived;
     private int status;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
 
+    @OneToMany
+    private List<ArticleImages> articleImages;
 
+    @ManyToOne
+    private User user;
+
+    @OneToMany(mappedBy = "article") // Correct mappedBy to point to the field in Likes
+    private List<Likes> likes;
+
+    @OneToOne
+    private City city;
+
+    @OneToOne(mappedBy = "article") // Correct mappedBy to point to the field in Model
+    private Model model;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
