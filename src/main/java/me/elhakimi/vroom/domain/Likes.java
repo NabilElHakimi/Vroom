@@ -18,7 +18,10 @@ public class Likes {
     private Long id;
 
     @ManyToOne
-    private Article article; // This matches mappedBy in the Article class
+    private Article article;
+
+    @ManyToOne
+    private User user;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

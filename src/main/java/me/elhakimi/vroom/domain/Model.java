@@ -20,7 +20,7 @@ public class Model {
 
     private String name;
 
-    @OneToOne(mappedBy = "article")
+    @OneToOne
     private Article article;
 
     @ManyToOne

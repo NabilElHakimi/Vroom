@@ -21,7 +21,7 @@ public class Mark {
 
     private String name;
 
-    @OneToMany(mappedBy = "model")
+    @OneToMany(mappedBy = "mark")
     private List<Model> models;
 
     private LocalDateTime updated_at;

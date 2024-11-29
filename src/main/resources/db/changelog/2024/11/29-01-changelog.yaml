@@ -1,6 +1,60 @@
 databaseChangeLog:
   - changeSet:
-      id: 1732822830255-1
+      id: 1732873909797-1
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: article_images_seq
+            startValue: 1
+  - changeSet:
+      id: 1732873909797-2
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: article_seq
+            startValue: 1
+  - changeSet:
+      id: 1732873909797-3
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: city_seq
+            startValue: 1
+  - changeSet:
+      id: 1732873909797-4
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: country_seq
+            startValue: 1
+  - changeSet:
+      id: 1732873909797-5
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: likes_seq
+            startValue: 1
+  - changeSet:
+      id: 1732873909797-6
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: mark_seq
+            startValue: 1
+  - changeSet:
+      id: 1732873909797-7
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -9,7 +63,16 @@ databaseChangeLog:
             sequenceName: model_seq
             startValue: 1
   - changeSet:
-      id: 1732822830255-2
+      id: 1732873909797-8
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: user_seq
+            startValue: 1
+  - changeSet:
+      id: 1732873909797-9
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -58,9 +121,6 @@ databaseChangeLog:
                   name: city_id
                   type: BIGINT
               - column:
-                  name: model_id
-                  type: BIGINT
-              - column:
                   name: created_at
                   type: DATETIME
               - column:
@@ -68,7 +128,7 @@ databaseChangeLog:
                   type: DATETIME
             tableName: article
   - changeSet:
-      id: 1732822830255-3
+      id: 1732873909797-10
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -86,7 +146,7 @@ databaseChangeLog:
                   type: BIGINT
             tableName: article_article_images
   - changeSet:
-      id: 1732822830255-4
+      id: 1732873909797-11
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -110,25 +170,7 @@ databaseChangeLog:
                   type: DATETIME
             tableName: article_images
   - changeSet:
-      id: 1732822830255-5
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - createTable:
-            columns:
-              - column:
-                  constraints:
-                    nullable: false
-                  name: article_id
-                  type: BIGINT
-              - column:
-                  constraints:
-                    nullable: false
-                  name: likes_id
-                  type: BIGINT
-            tableName: article_likes
-  - changeSet:
-      id: 1732822830255-6
+      id: 1732873909797-12
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -158,7 +200,7 @@ databaseChangeLog:
                   type: DATETIME
             tableName: city
   - changeSet:
-      id: 1732822830255-7
+      id: 1732873909797-13
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -185,7 +227,7 @@ databaseChangeLog:
                   type: DATETIME
             tableName: country
   - changeSet:
-      id: 1732822830255-8
+      id: 1732873909797-14
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -199,17 +241,20 @@ databaseChangeLog:
                   name: id
                   type: BIGINT
               - column:
-                  name: user_id
+                  name: article_id
                   type: BIGINT
               - column:
-                  name: article_id
+                  name: user_id
                   type: BIGINT
               - column:
                   name: created_at
                   type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
             tableName: likes
   - changeSet:
-      id: 1732822830255-9
+      id: 1732873909797-15
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -233,25 +278,7 @@ databaseChangeLog:
                   type: DATETIME
             tableName: mark
   - changeSet:
-      id: 1732822830255-10
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - createTable:
-            columns:
-              - column:
-                  constraints:
-                    nullable: false
-                  name: mark_id
-                  type: BIGINT
-              - column:
-                  constraints:
-                    nullable: false
-                  name: models_id
-                  type: BIGINT
-            tableName: mark_models
-  - changeSet:
-      id: 1732822830255-11
+      id: 1732873909797-16
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -281,7 +308,7 @@ databaseChangeLog:
                   type: DATETIME
             tableName: model
   - changeSet:
-      id: 1732822830255-12
+      id: 1732873909797-17
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -328,43 +355,7 @@ databaseChangeLog:
                   type: TIME
             tableName: user
   - changeSet:
-      id: 1732822830255-13
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - createTable:
-            columns:
-              - column:
-                  constraints:
-                    nullable: false
-                  name: user_id
-                  type: BIGINT
-              - column:
-                  constraints:
-                    nullable: false
-                  name: articles_id
-                  type: BIGINT
-            tableName: user_articles
-  - changeSet:
-      id: 1732822830255-14
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - createTable:
-            columns:
-              - column:
-                  constraints:
-                    nullable: false
-                  name: user_id
-                  type: BIGINT
-              - column:
-                  constraints:
-                    nullable: false
-                  name: likes_id
-                  type: BIGINT
-            tableName: user_likes
-  - changeSet:
-      id: 1732822830255-15
+      id: 1732873909797-18
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -373,43 +364,7 @@ databaseChangeLog:
             constraintName: uc_article_article_images_articleimages
             tableName: article_article_images
   - changeSet:
-      id: 1732822830255-16
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addUniqueConstraint:
-            columnNames: likes_id
-            constraintName: uc_article_likes_likes
-            tableName: article_likes
-  - changeSet:
-      id: 1732822830255-17
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addUniqueConstraint:
-            columnNames: models_id
-            constraintName: uc_mark_models_models
-            tableName: mark_models
-  - changeSet:
-      id: 1732822830255-18
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addUniqueConstraint:
-            columnNames: articles_id
-            constraintName: uc_user_articles_articles
-            tableName: user_articles
-  - changeSet:
-      id: 1732822830255-19
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addUniqueConstraint:
-            columnNames: likes_id
-            constraintName: uc_user_likes_likes
-            tableName: user_likes
-  - changeSet:
-      id: 1732822830255-20
+      id: 1732873909797-19
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -420,7 +375,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: article
   - changeSet:
-      id: 1732822830255-21
+      id: 1732873909797-20
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -431,18 +386,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: city
   - changeSet:
-      id: 1732822830255-22
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: model_id
-            baseTableName: article
-            constraintName: FK_ARTICLE_ON_MODEL
-            referencedColumnNames: id
-            referencedTableName: model
-  - changeSet:
-      id: 1732822830255-23
+      id: 1732873909797-21
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -453,7 +397,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: user
   - changeSet:
-      id: 1732822830255-24
+      id: 1732873909797-22
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -464,7 +408,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: article
   - changeSet:
-      id: 1732822830255-25
+      id: 1732873909797-23
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -475,7 +419,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: country
   - changeSet:
-      id: 1732822830255-26
+      id: 1732873909797-24
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -486,7 +430,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: city
   - changeSet:
-      id: 1732822830255-27
+      id: 1732873909797-25
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -497,7 +441,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: article
   - changeSet:
-      id: 1732822830255-28
+      id: 1732873909797-26
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -508,7 +452,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: user
   - changeSet:
-      id: 1732822830255-29
+      id: 1732873909797-27
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -519,7 +463,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: article
   - changeSet:
-      id: 1732822830255-30
+      id: 1732873909797-28
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -530,7 +474,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: mark
   - changeSet:
-      id: 1732822830255-31
+      id: 1732873909797-29
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -541,7 +485,7 @@ databaseChangeLog:
             referencedColumnNames: id
             referencedTableName: article
   - changeSet:
-      id: 1732822830255-32
+      id: 1732873909797-30
       author: Youcode
       objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
       changes:
@@ -551,92 +495,4 @@ databaseChangeLog:
             constraintName: fk_artartima_on_article_images
             referencedColumnNames: id
             referencedTableName: article_images
-  - changeSet:
-      id: 1732822830255-33
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: article_id
-            baseTableName: article_likes
-            constraintName: fk_artlik_on_article
-            referencedColumnNames: id
-            referencedTableName: article
-  - changeSet:
-      id: 1732822830255-34
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: likes_id
-            baseTableName: article_likes
-            constraintName: fk_artlik_on_likes
-            referencedColumnNames: id
-            referencedTableName: likes
-  - changeSet:
-      id: 1732822830255-35
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: mark_id
-            baseTableName: mark_models
-            constraintName: fk_marmod_on_mark
-            referencedColumnNames: id
-            referencedTableName: mark
-  - changeSet:
-      id: 1732822830255-36
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: models_id
-            baseTableName: mark_models
-            constraintName: fk_marmod_on_model
-            referencedColumnNames: id
-            referencedTableName: model
-  - changeSet:
-      id: 1732822830255-37
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: articles_id
-            baseTableName: user_articles
-            constraintName: fk_useart_on_article
-            referencedColumnNames: id
-            referencedTableName: article
-  - changeSet:
-      id: 1732822830255-38
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: user_id
-            baseTableName: user_articles
-            constraintName: fk_useart_on_user
-            referencedColumnNames: id
-            referencedTableName: user
-  - changeSet:
-      id: 1732822830255-39
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: likes_id
-            baseTableName: user_likes
-            constraintName: fk_uselik_on_likes
-            referencedColumnNames: id
-            referencedTableName: likes
-  - changeSet:
-      id: 1732822830255-40
-      author: Youcode
-      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
-      changes:
-        - addForeignKeyConstraint:
-            baseColumnNames: user_id
-            baseTableName: user_likes
-            constraintName: fk_uselik_on_user
-            referencedColumnNames: id
-            referencedTableName: user
 

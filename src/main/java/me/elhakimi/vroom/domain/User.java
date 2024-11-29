@@ -26,10 +26,10 @@ public class User {
     private LocalTime verification_code_expiresAt ;
     private boolean enabled;
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "user")
     private List<Article> articles;
 
-    @OneToMany(mappedBy = "likes")
+    @OneToMany(mappedBy = "user")
     private List<Likes> likes;
 
     private LocalTime created_at ;

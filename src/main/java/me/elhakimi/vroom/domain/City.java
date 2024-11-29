@@ -20,7 +20,6 @@ public class City {
 
     private String name;
 
-    // Remove mappedBy because this class owns the relationship
     @OneToOne
     private Article article;
 
