@@ -11,6 +11,7 @@ import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
 import me.elhakimi.vroom.dto.user.response.mapper.RegisterUserResponseMapper;
 import me.elhakimi.vroom.repository.UserRepository;
 import me.elhakimi.vroom.service.UserService;
+import me.elhakimi.vroom.utils.EmailSenderUtil;
 import org.springframework.context.support.BeanDefinitionDsl;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
     private final RegisterUserRequestMapper registerUserRequestMapper;
     private final RegisterUserResponseMapper registerUserResponseMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JavaMailSender JavaMailSender;
+    private final EmailSenderUtil emailSenderUtil;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -69,11 +70,11 @@ public class UserServiceImpl implements UserService {
 
     public void sendActivationEmail(AppUser user) {
         {
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(user.getEmail());
-            mailMessage.setSubject("Vroom Account Activation");
-            mailMessage.setText("Your activation code is : " + user.getActivationCode());
-            JavaMailSender.send(mailMessage);
+            emailSenderUtil.sendActivationEmail(
+                    user.getEmail() ,
+                    "Vroom Account Activation" ,
+                    "Your activation code is : " + user.getActivationCode()
+            );
         }
     }
 
