@@ -15,7 +15,6 @@ public class RegisterUserRequestDTO {
     @NonNull
     @NotBlank
     private String last_name;
-
     @NonNull
     @NotBlank
     private String username;

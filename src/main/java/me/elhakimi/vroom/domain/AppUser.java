@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -27,6 +28,10 @@ public class AppUser implements UserDetails {
     private String last_name;
     private String password;
     private boolean actif = false ;
+    private boolean isUsedCode = false;
+    private String activationCode;
+    private Instant createdAt ;
+    private Instant expiresAt  ;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Role role;
@@ -65,5 +70,6 @@ public class AppUser implements UserDetails {
     public boolean isEnabled() {
         return this.actif;
     }
+
 }
 
