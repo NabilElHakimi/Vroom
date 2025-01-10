@@ -1,4 +1,12 @@
 package me.elhakimi.vroom.repository;
 
-public interface UserRepository {
+import me.elhakimi.vroom.domain.AppUser;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserRepository extends JpaRepository<AppUser, Long> {
+
+    AppUser findUserByEmail(String email);
+
 }

@@ -1,4 +1,3 @@
-
 spring:
   application:
     name: Vroom
@@ -8,13 +7,22 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+        ddl-auto: create-drop
   liquibase:
-    enabled: true
+    enabled: false
     change-log: db/changelog/master.yaml
   docker:
     compose:
       file: src/main/docker/compose.yaml
       enabled: true
       lifecycle-management: start-only
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    password: f7a4964915afd3
+    username: 553860333d6328
 server:
   port: 8082
+  servlet:
+      context-path: /api/v1

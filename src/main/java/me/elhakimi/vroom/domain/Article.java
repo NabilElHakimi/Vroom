@@ -29,7 +29,7 @@ public class Article {
     private List<ArticleImages> articleImages;
 
     @ManyToOne
-    private User user;
+    private AppUser user;
 
     @OneToMany(mappedBy = "article") // Correct mappedBy to point to the field in Likes
     private List<Likes> likes;

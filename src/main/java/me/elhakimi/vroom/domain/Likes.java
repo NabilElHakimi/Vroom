@@ -21,7 +21,7 @@ public class Likes {
     private Article article;
 
     @ManyToOne
-    private User user;
+    private AppUser user;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
