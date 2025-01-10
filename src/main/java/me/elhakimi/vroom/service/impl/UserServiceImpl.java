@@ -68,6 +68,23 @@ public class UserServiceImpl implements UserService {
         return registerUserResponseMapper.toRegisterResponseUserDTO(appUser);
     }
 
+    @Override
+    public void resendValidation(String username) {
+        AppUser user = userRepository.findAppUsersByUsername(username);
+        if(user == null){
+            throw new IllegalArgumentException("Invalid username");
+        }
+        Random random = new Random();
+        int randomInt = random.nextInt(999999);
+        String code = String.format("%06d", randomInt);
+        user.setActivationCode(code);
+        user.setCreatedAt(Instant.now());
+        user.setExpiresAt(Instant.now().plusSeconds(60 * 10));
+        user.setUsedCode(false);
+        userRepository.save(user);
+        sendActivationEmail(user);
+    }
+
     public void sendActivationEmail(AppUser user) {
         {
             emailSenderUtil.sendActivationEmail(
@@ -99,23 +116,6 @@ public class UserServiceImpl implements UserService {
         user.setUsedCode(true);
         this.userRepository.save(user);
 
-    }
-
-    @Override
-    public void resendValidation(String username) {
-        AppUser user = userRepository.findAppUsersByUsername(username);
-        if(user == null){
-            throw new IllegalArgumentException("Invalid username");
-        }
-        Random random = new Random();
-        int randomInt = random.nextInt(999999);
-        String code = String.format("%06d", randomInt);
-        user.setActivationCode(code);
-        user.setCreatedAt(Instant.now());
-        user.setExpiresAt(Instant.now().plusSeconds(60 * 10));
-        user.setUsedCode(false);
-        userRepository.save(user);
-        sendActivationEmail(user);
     }
 
 
