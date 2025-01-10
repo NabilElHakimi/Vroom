@@ -2,9 +2,12 @@ package me.elhakimi.vroom.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import me.elhakimi.vroom.domain.enums.Role;
-import java.time.LocalTime;
-import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @NoArgsConstructor
@@ -13,28 +16,54 @@ import java.util.List;
 @Setter
 @Getter
 @Table(name = "\"user\"")
-public class AppUser {
+public class AppUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(nullable = false)
     private Long id;
     private String first_name;
-    private String last_name;
+    private String username;
     private String email;
+    private String last_name;
     private String password;
-    @Enumerated(EnumType.STRING)
+    private boolean actif = false ;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Role role;
-    private String email_verification_code;
-    private LocalTime verification_code_expiresAt ;
-    private boolean enabled;
 
-    @OneToMany(mappedBy = "user")
-    private List<Article> articles;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.getName()) );
+    }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Likes> likes;
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
 
-    private LocalTime created_at ;
-    private LocalTime updated_at ;
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.actif;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.actif;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.actif;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.actif;
+    }
 }
 

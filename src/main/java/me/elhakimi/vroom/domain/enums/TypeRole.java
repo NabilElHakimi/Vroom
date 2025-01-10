@@ -1,6 +1,6 @@
 package me.elhakimi.vroom.domain.enums;
 
-public enum Role {
+public enum TypeRole {
     USER,
     ADMIN
 }

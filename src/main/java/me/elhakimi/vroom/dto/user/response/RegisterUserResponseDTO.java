@@ -10,5 +10,6 @@ import lombok.*;
 public class RegisterUserResponseDTO {
     private String first_name;
     private String last_name;
+    private String username;
     private String email;
 }
