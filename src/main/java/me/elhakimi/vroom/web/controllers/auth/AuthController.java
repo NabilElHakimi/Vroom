@@ -6,9 +6,16 @@ import lombok.AllArgsConstructor;
 import me.elhakimi.vroom.dto.user.request.RegisterUserRequestDTO;
 import me.elhakimi.vroom.dto.user.request.UserValidationRequest;
 import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
+import me.elhakimi.vroom.security.JwtService;
 import me.elhakimi.vroom.service.UserService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -17,6 +24,9 @@ public class AuthController {
 
     @Qualifier("userServiceImpl")
     private final UserService userService;
+    private final JwtService jwtService;
+
+    private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
     public RegisterUserResponseDTO register(@RequestBody RegisterUserRequestDTO user){
@@ -34,6 +44,20 @@ public class AuthController {
     @PostMapping("/resend")
     public void resendValidation(@RequestParam String username){
         userService.resendValidation(username);
+    }
+
+    @PostMapping("/login")
+    public Map<String , String> login(@RequestBody RegisterUserRequestDTO user){
+            final Authentication authenticate = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+            );
+
+            if(authenticate.isAuthenticated()){
+                return jwtService.generateToken(user.getUsername());
+            }
+
+            return Map.of("message", "Invalid credentials");
+
     }
 
 }

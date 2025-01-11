@@ -10,12 +10,11 @@ import me.elhakimi.vroom.dto.user.request.mapper.RegisterUserRequestMapper;
 import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
 import me.elhakimi.vroom.dto.user.response.mapper.RegisterUserResponseMapper;
 import me.elhakimi.vroom.repository.UserRepository;
+import me.elhakimi.vroom.security.JwtService;
 import me.elhakimi.vroom.service.UserService;
 import me.elhakimi.vroom.utils.EmailSenderUtil;
-import org.springframework.context.support.BeanDefinitionDsl;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ import java.util.Random;
 
 @Service
 @AllArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService , UserDetailsService {
 
     private final UserRepository userRepository;
     private final RegisterUserRequestMapper registerUserRequestMapper;
@@ -35,8 +34,12 @@ public class UserServiceImpl implements UserService {
     private final EmailSenderUtil emailSenderUtil;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public AppUser loadUserByUsername(String username) throws UsernameNotFoundException {
+        AppUser user = userRepository.findAppUsersByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return user;
     }
 
     public RegisterUserResponseDTO saveUser(RegisterUserRequestDTO user) {
@@ -117,6 +120,8 @@ public class UserServiceImpl implements UserService {
         this.userRepository.save(user);
 
     }
+
+
 
 
 
