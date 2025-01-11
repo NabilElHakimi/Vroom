@@ -79,11 +79,13 @@ public class JwtService {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-            return Jwts.parser()
+            return Jwts
+                    .parser()
                     .setSigningKey(getKeySecretKey())
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
+
     }
 
 }
