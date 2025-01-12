@@ -2,7 +2,6 @@ package me.elhakimi.vroom.web.controllers.auth;
 
 
 import lombok.AllArgsConstructor;
-import me.elhakimi.vroom.domain.AppUser;
 import me.elhakimi.vroom.dto.user.request.ChangePassword;
 import me.elhakimi.vroom.dto.user.request.RegisterUserRequestDTO;
 import me.elhakimi.vroom.dto.user.request.RestPassword;

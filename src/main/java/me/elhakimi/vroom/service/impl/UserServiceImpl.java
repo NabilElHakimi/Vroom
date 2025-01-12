@@ -12,10 +12,8 @@ import me.elhakimi.vroom.dto.user.request.mapper.RegisterUserRequestMapper;
 import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
 import me.elhakimi.vroom.dto.user.response.mapper.RegisterUserResponseMapper;
 import me.elhakimi.vroom.repository.UserRepository;
-import me.elhakimi.vroom.security.JwtService;
 import me.elhakimi.vroom.service.UserService;
 import me.elhakimi.vroom.utils.EmailSenderUtil;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -44,6 +42,41 @@ public class UserServiceImpl implements UserService , UserDetailsService {
 //        saveRefreshToken(user);
 
         return user;
+    }
+
+    // Register user ------------------------------------------------------------------------------------------------------------------------------
+    public RegisterUserResponseDTO save(RegisterUserRequestDTO user) {
+
+        AppUser existingUser = userRepository.findAppUsersByUsername(user.getUsername());
+
+        if (existingUser != null) {
+            throw new IllegalArgumentException("User with username :  " + user.getUsername() + " already exists");
+        }
+
+        AppUser checkEmail = userRepository.findAppUsersByEmail(user.getEmail());
+        if (checkEmail != null) {
+            throw new IllegalArgumentException("User with email :  " + user.getEmail() + " already exists");
+        }
+
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
+        AppUser appUser = registerUserRequestMapper.toAppUser(user);
+
+        Role role = new Role();
+        role.setName(TypeRole.USER);
+        appUser.setRole(role);
+
+        Random random = new Random();
+        int randomInt = random.nextInt(999999);
+        String code = String.format("%06d", randomInt);
+        appUser.setActivationCode(code);
+        appUser.setCreatedAt(Instant.now());
+        appUser.setExpiresAt(Instant.now().plusSeconds(60 * 10));
+        userRepository.save(appUser);
+
+        sendActivationEmail(appUser);
+
+        return registerUserResponseMapper.toRegisterResponseUserDTO(appUser);
     }
 
     @Override
@@ -138,34 +171,7 @@ public class UserServiceImpl implements UserService , UserDetailsService {
     }
 
 
-    public RegisterUserResponseDTO save(RegisterUserRequestDTO user) {
 
-        AppUser existingUser = userRepository.findAppUsersByUsername(user.getUsername());
-
-        if (existingUser != null) {
-            throw new IllegalArgumentException("User with username :  " + user.getUsername() + " already exists");
-        }
-
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-
-        AppUser appUser = registerUserRequestMapper.toAppUser(user);
-
-        Role role = new Role();
-        role.setName(TypeRole.USER);
-        appUser.setRole(role);
-
-        Random random = new Random();
-        int randomInt = random.nextInt(999999);
-        String code = String.format("%06d", randomInt);
-        appUser.setActivationCode(code);
-        appUser.setCreatedAt(Instant.now());
-        appUser.setExpiresAt(Instant.now().plusSeconds(60 * 10));
-         userRepository.save(appUser);
-
-         sendActivationEmail(appUser);
-
-        return registerUserResponseMapper.toRegisterResponseUserDTO(appUser);
-    }
 
     @Override
     public void resendValidation(String username) {
@@ -177,7 +183,6 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         if(user.isActif()){
             throw new IllegalArgumentException("User already activated Try with login");
         }
-
 
         Random random = new Random();
         int randomInt = random.nextInt(999999);
@@ -223,8 +228,4 @@ public class UserServiceImpl implements UserService , UserDetailsService {
 
     }
 
-
-
-
-
-    }
+}
