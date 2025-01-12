@@ -13,7 +13,7 @@ import me.elhakimi.vroom.repository.UserRepository;
 import me.elhakimi.vroom.security.JwtService;
 import me.elhakimi.vroom.service.UserService;
 import me.elhakimi.vroom.utils.EmailSenderUtil;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,10 +39,23 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
+//        saveRefreshToken(user);
+
         return user;
     }
 
-    public RegisterUserResponseDTO saveUser(RegisterUserRequestDTO user) {
+    @Override
+    public AppUser saveRefreshToken(AppUser user) {
+        System.out.println(user.getRefreshToken());
+        return userRepository.save(user);
+    }
+
+    @Override
+    public AppUser getByRefreshToken(String rToken) {
+        return userRepository.findAppUsersByRefreshToken(rToken);
+    }
+
+    public RegisterUserResponseDTO save(RegisterUserRequestDTO user) {
 
         AppUser existingUser = userRepository.findAppUsersByUsername(user.getUsername());
 

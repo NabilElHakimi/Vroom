@@ -31,8 +31,6 @@ public class JwtService {
     private Map<String, String> generateJwt(AppUser appUser) {
 
         long currentTime = System.currentTimeMillis();
-        long expirationDate = System.currentTimeMillis() + 30 * 60 * 1000;
-
 
         final Map<String, String> claims = Map.of(
                                 "username", appUser.getUsername(),
@@ -41,11 +39,12 @@ public class JwtService {
 
         final String bearer = Jwts.builder()
                 .issuedAt(new Date(currentTime))
-                .expiration(new Date(currentTime + 30 * 60 * 1000))
+                .expiration(new Date(currentTime + 10 * 1000))
                 .subject(appUser.getUsername())
                 .claims(claims)
                 .signWith(getKeySecretKey())
                 .compact();
+
 
         return Map.of("token", bearer);
 
@@ -57,9 +56,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(decode);
     }
 
-
     public String extractUsername(String token) {
-
         return  getClaim(token , Claims::getSubject);
 
     }
@@ -87,5 +84,48 @@ public class JwtService {
                     .getBody();
 
     }
+
+    //Refresh Token
+
+    public Map<String, String> generateRefreshToken(String username) {
+
+        long currentTime = System.currentTimeMillis();
+
+        String rToken =   Jwts.builder()
+                .issuedAt(new Date(currentTime))
+                .subject(username)
+                .expiration(new Date(currentTime + 7 * 24 * 60 * 60 * 1000))
+                .signWith(getKeySecretKey())
+                .compact();
+
+        return Map.of("refreshToken" , rToken);
+
+    }
+
+    public Map<String , String > getRefreshTokenAndAccessToken(String username){
+        Map<String, String> refreshToken = this.generateRefreshToken(username);
+        AppUser appUser = userService.loadUserByUsername(username);
+        appUser.setRefreshToken(refreshToken.get("refreshToken"));
+        userService.saveRefreshToken(appUser);
+        Map<String, String> accessToken = this.generateToken(username);
+        return Map.of("refreshToken" , refreshToken.get("refreshToken") , "token" , accessToken.get("token"));
+
+    }
+
+    public Map<String, String> generateNewToken(String rToken) {
+
+        if(rToken == null){
+            throw new IllegalArgumentException("Refresh token is null");
+        }
+
+        if(isTokenExpired(rToken)){
+            throw new IllegalArgumentException("Refresh token is expired");
+        }
+
+        AppUser appUser = userService.getByRefreshToken(rToken);
+        return this.generateJwt(appUser);
+
+    }
+
 
 }

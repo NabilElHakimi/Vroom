@@ -40,13 +40,13 @@ public class SecurityConfig {
                                     .requestMatchers(GET, "/auth/**").permitAll()
                                     .anyRequest().authenticated()
                         )
+
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .addFilterBefore( jwtFilter  ,  UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

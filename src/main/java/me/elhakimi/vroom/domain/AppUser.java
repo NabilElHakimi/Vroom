@@ -32,6 +32,7 @@ public class AppUser implements UserDetails {
     private String activationCode;
     private Instant createdAt ;
     private Instant expiresAt  ;
+    private String refreshToken;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Role role;

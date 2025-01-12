@@ -4,12 +4,9 @@ import me.elhakimi.vroom.domain.AppUser;
 import me.elhakimi.vroom.dto.user.request.RegisterUserRequestDTO;
 import me.elhakimi.vroom.dto.user.request.UserValidationRequest;
 import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
 
 public interface UserService  {
-    RegisterUserResponseDTO saveUser(RegisterUserRequestDTO user);
+    RegisterUserResponseDTO save(RegisterUserRequestDTO user);
 
     void validateUser(UserValidationRequest validationRequest);
 
@@ -19,4 +16,7 @@ public interface UserService  {
     AppUser loadUserByUsername(String userName);
 //    void resendValidation(String username);
 
+    AppUser saveRefreshToken(AppUser user);
+
+    AppUser getByRefreshToken(String rToken);
 }
