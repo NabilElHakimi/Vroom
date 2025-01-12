@@ -2,12 +2,18 @@ package me.elhakimi.vroom.web.controllers.auth;
 
 
 import lombok.AllArgsConstructor;
+import me.elhakimi.vroom.domain.AppUser;
+import me.elhakimi.vroom.dto.user.request.ChangePassword;
 import me.elhakimi.vroom.dto.user.request.RegisterUserRequestDTO;
+import me.elhakimi.vroom.dto.user.request.RestPassword;
 import me.elhakimi.vroom.dto.user.request.UserValidationRequest;
 import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
 import me.elhakimi.vroom.security.JwtService;
 import me.elhakimi.vroom.service.UserService;
+import me.elhakimi.vroom.utils.ResponseUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,12 +50,6 @@ public class AuthController {
         userService.resendValidation(username);
     }
 
-    @PostMapping("/refresh")
-    public Map<String, String> refresh(@RequestParam String refreshToken){
-        return  jwtService.generateNewToken(refreshToken);
-
-    }
-
     @PostMapping("/login")
     public Map<String , String> login(@RequestBody RegisterUserRequestDTO user){
             final Authentication authenticate = authenticationManager.authenticate(
@@ -62,6 +62,41 @@ public class AuthController {
 
             return Map.of("message", "Invalid credentials");
 
+    }
+
+    @PostMapping("/refresh-token")
+    public Map<String, String> refresh(@RequestParam String refreshToken){
+        return  jwtService.generateNewToken(refreshToken);
+
+    }
+
+    @PostMapping("/logout")
+    public void logout(@RequestParam String refreshToken){
+        userService.logout(refreshToken);
+    }
+
+
+    @PostMapping("/change-password")
+    public ResponseEntity<Object> changePassword(@RequestBody ChangePassword changePassword) {
+        if (userService.changePassword(changePassword)) {
+            return ResponseUtil.successResponse("Password changed successfully");
+        }
+        return ResponseUtil.errorResponse("Bad Request", "Password change failed", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Object> resetPassword(@RequestBody RestPassword restPassword) {
+        userService.resetPassword(restPassword);
+        return ResponseUtil.successResponse("Password reset successfully");
+    }
+
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Object> forgotPassword(@RequestParam String email) {
+        if (userService.forgotPassword(email)) {
+            return ResponseUtil.successResponse("Password reset code sent to email");
+        }
+        return ResponseUtil.errorResponse("Bad Request", "Password reset failed", HttpStatus.BAD_REQUEST);
     }
 
 
