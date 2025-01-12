@@ -170,9 +170,6 @@ public class UserServiceImpl implements UserService , UserDetailsService {
 
     }
 
-
-
-
     @Override
     public void resendValidation(String username) {
         AppUser user = userRepository.findAppUsersByUsername(username);
