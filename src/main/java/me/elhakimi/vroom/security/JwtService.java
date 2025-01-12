@@ -39,12 +39,11 @@ public class JwtService {
 
         final String bearer = Jwts.builder()
                 .issuedAt(new Date(currentTime))
-                .expiration(new Date(currentTime + 10 * 1000))
+                .expiration(new Date(currentTime + 15 * 60 * 1000))
                 .subject(appUser.getUsername())
                 .claims(claims)
                 .signWith(getKeySecretKey())
                 .compact();
-
 
         return Map.of("token", bearer);
 
@@ -94,7 +93,7 @@ public class JwtService {
         String rToken =   Jwts.builder()
                 .issuedAt(new Date(currentTime))
                 .subject(username)
-                .expiration(new Date(currentTime + 7 * 24 * 60 * 60 * 1000))
+                .expiration(new Date(currentTime + 30L * 24 * 60 * 60 * 1000))
                 .signWith(getKeySecretKey())
                 .compact();
 
