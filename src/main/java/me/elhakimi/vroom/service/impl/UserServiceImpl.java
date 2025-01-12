@@ -177,6 +177,7 @@ public class UserServiceImpl implements UserService , UserDetailsService {
             throw new IllegalArgumentException("User already activated Try with login");
         }
 
+
         Random random = new Random();
         int randomInt = random.nextInt(999999);
         String code = String.format("%06d", randomInt);
