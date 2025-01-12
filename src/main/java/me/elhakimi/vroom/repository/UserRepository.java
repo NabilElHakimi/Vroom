@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<AppUser, Long> {
             AppUser findAppUsersByActivationCode(String activationCode);
 
     AppUser findAppUsersByRefreshToken(String rToken);
+
+    AppUser findAppUsersByEmail(String email);
 }
