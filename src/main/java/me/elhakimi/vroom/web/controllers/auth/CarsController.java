@@ -6,14 +6,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.security.authorization.AuthorityAuthorizationManager.hasRole;
+
 @RestController
 
-@PreAuthorize("hasRole('ROLE_USER')")
 @RequestMapping("/cars")
 public class CarsController {
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public String getCars() {
         return "Cars";
     }
+
 }
