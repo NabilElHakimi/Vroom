@@ -1,6 +1,8 @@
 package me.elhakimi.vroom.dto.user.response;
 
 import me.elhakimi.vroom.domain.*;
+import me.elhakimi.vroom.domain.enums.VehicleStatus;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,7 +14,7 @@ public record VehicleResponse (
         double price,
         boolean isPublished,
         boolean isArchived,
-        int status,
+        VehicleStatus status,
         List<VehicleImages> articleImages,
         UserDetails userDetails,
         List<Likes> likes,

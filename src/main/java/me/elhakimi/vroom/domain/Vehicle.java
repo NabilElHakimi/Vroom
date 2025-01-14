@@ -2,6 +2,8 @@ package me.elhakimi.vroom.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import me.elhakimi.vroom.domain.enums.VehicleStatus;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,7 +25,9 @@ public class Vehicle {
     private double price ;
     private boolean isPublished = false;
     private boolean isArchived = false;
-    private int status;
+
+    @Enumerated(EnumType.STRING)
+    private VehicleStatus status;
 
     @OneToMany
     private List<VehicleImages> articleImages;

@@ -4,6 +4,7 @@ package me.elhakimi.vroom.service.impl;
 import lombok.AllArgsConstructor;
 import me.elhakimi.vroom.domain.AppUser;
 import me.elhakimi.vroom.domain.Vehicle;
+import me.elhakimi.vroom.domain.enums.VehicleStatus;
 import me.elhakimi.vroom.repository.VehicleRepository;
 import me.elhakimi.vroom.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +25,7 @@ public class VehicleServiceImpl {
         AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         vehicle.setUser(appUser);
         vehicle.setCreatedAt(LocalDateTime.now());
-        vehicle.setStatus(0);
+        vehicle.setStatus(VehicleStatus.PENDING);
 
         return vehicleRepository.save(vehicle);
 
