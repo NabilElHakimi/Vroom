@@ -14,6 +14,7 @@ public record UserDetails(
                 appUser.getUsername(),
                 appUser.getEmail(),
                 appUser.getLast_name()
+
         );
     }
 }
