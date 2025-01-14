@@ -21,7 +21,7 @@ public class Model {
     private String name;
 
     @OneToOne
-    private Article article;
+    private Vehicle vehicle;
 
     @ManyToOne
     private Mark mark;

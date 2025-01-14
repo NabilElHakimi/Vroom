@@ -21,7 +21,7 @@ public class City {
     private String name;
 
     @OneToOne
-    private Article article;
+    private Vehicle vehicle;
 
     @ManyToOne
     private Country country;

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -18,7 +17,7 @@ public class Likes {
     private Long id;
 
     @ManyToOne
-    private Article article;
+    private Vehicle vehicle;
 
     @ManyToOne
     private AppUser user;

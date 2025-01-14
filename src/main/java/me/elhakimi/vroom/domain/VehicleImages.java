@@ -11,14 +11,14 @@ import java.time.LocalDateTime;
 @Builder
 @Setter
 @Getter
-public class ArticleImages {
+public class VehicleImages {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false)
     private Long id;
 
     @ManyToOne
-    private Article article;
+    private Vehicle vehicle;
 
     private String image_url;
     private LocalDateTime created_at;
