@@ -39,7 +39,8 @@ public class JwtService {
 
         final String bearer = Jwts.builder()
                 .issuedAt(new Date(currentTime))
-                .expiration(new Date(currentTime + 15 * 60 * 1000))
+//                .expiration(new Date(currentTime + 15 * 60 * 1000))
+                .expiration(new Date(currentTime + 7 * 60 * 60 * 1000))
                 .subject(appUser.getUsername())
                 .claims(claims)
                 .signWith(getKeySecretKey())
