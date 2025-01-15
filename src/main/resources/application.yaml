@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: Vroom
   jpa:
@@ -8,7 +10,7 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-        ddl-auto: update
+      ddl-auto: update
   liquibase:
     enabled: false
     change-log: db/changelog/master.yaml
@@ -22,7 +24,20 @@ spring:
     port: 2525
     password: f7a4964915afd3
     username: 553860333d6328
+
+cloud:
+  aws:
+    credentials:
+      access-key: AKIAYHJANMV6HVGFFT4N
+      secret-key: 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
+    region:
+      static: eu-west-3
+
+application:
+  bucket:
+    name: vrooma
+
 server:
   port: 8082
   servlet:
-      context-path: /api/v1
+    context-path: /api/v1
