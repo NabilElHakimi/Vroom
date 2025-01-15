@@ -1,6 +1,7 @@
 package me.elhakimi.vroom.web.admin;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import me.elhakimi.vroom.domain.Vehicle;
 import me.elhakimi.vroom.dto.user.response.UserDetails;
@@ -11,8 +12,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.print.Pageable;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/admin/vehicles")
@@ -24,18 +27,25 @@ public class VehicleController {
         private final VehicleServiceImpl vehicleServiceImpl;
 
         @PostMapping
-        public ResponseEntity<Object> addVehicle(@RequestBody Vehicle vehicle) {
+        public ResponseEntity<Object> addVehicle(
+                @RequestParam("vehicle") String vehicleJson, // Recevoir les données JSON en tant que chaîne
+                @RequestParam("images") MultipartFile[] images) throws IOException { // Recevoir les fichiers
 
-            Vehicle saveVehicle = vehicleServiceImpl.save(vehicle);
-            if(saveVehicle != null) {
-                return ResponseEntity.ok(VehicleResponse.from(saveVehicle , UserDetails.from(saveVehicle.getUser())));
-            }
-            else {
+            // Convertir la chaîne JSON en objet Vehicle
+            ObjectMapper objectMapper = new ObjectMapper();
+            Vehicle vehicle = objectMapper.readValue(vehicleJson, Vehicle.class);
+
+            // Appeler votre service pour enregistrer le véhicule et les images
+            Vehicle saveVehicle = vehicleServiceImpl.save(vehicle, images);
+
+            if (saveVehicle != null) {
+                return ResponseEntity.ok(VehicleResponse.from(saveVehicle, UserDetails.from(saveVehicle.getUser())));
+            } else {
                 return ResponseEntity.badRequest().body(vehicle);
             }
         }
 
-        @PostMapping("/update")
+    @PostMapping("/update")
         public ResponseEntity<Object> updateVehicle(@RequestBody Vehicle vehicle) {
 
             Vehicle updateVehicle = vehicleServiceImpl.update(vehicle);
