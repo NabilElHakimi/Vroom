@@ -38,10 +38,8 @@ public class VehicleServiceImpl {
         vehicleRepository.save(vehicle);
 
         for (MultipartFile image : images) {
-            // Vous pouvez adapter en fonction de la logique de traitement des images dans votre application
             String imageUrl = storageService.uploadFile(image, appUser.getUsername());
 
-            // Si vous avez une entité image à ajouter pour chaque image
             VehicleImages vehicleImage = new VehicleImages();
             vehicleImage.setVehicle(vehicle);
             vehicleImage.setImage_url(imageUrl);
