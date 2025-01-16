@@ -19,3 +19,4 @@ public interface VehicleRepository extends JpaRepository<Vehicle , Long> {
             Optional<Vehicle> findByIdWithImages(Long id);
 
 }
+
