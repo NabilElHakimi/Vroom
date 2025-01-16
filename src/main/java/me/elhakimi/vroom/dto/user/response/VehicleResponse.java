@@ -15,7 +15,7 @@ public record VehicleResponse (
         boolean isPublished,
         boolean isArchived,
         VehicleStatus status,
-        List<VehicleImages> articleImages,
+        List<VehicleImagesResponse> articleImages,
         UserDetails userDetails,
         List<Likes> likes,
         City city,
@@ -24,7 +24,7 @@ public record VehicleResponse (
         LocalDateTime updatedAt
 ) {
 
-    public static VehicleResponse from(Vehicle vehicle, UserDetails userDetails) {
+    public static VehicleResponse from(Vehicle vehicle, UserDetails userDetails , List<VehicleImagesResponse> VehicleImagesResponse) {
         return new VehicleResponse(
                 vehicle.getId(),
                 vehicle.getTitle(),
@@ -34,7 +34,7 @@ public record VehicleResponse (
                 vehicle.isPublished(),
                 vehicle.isArchived(),
                 vehicle.getStatus(),
-                vehicle.getArticleImages(),
+                VehicleImagesResponse,
                 userDetails,
                 vehicle.getLikes(),
                 vehicle.getCity(),

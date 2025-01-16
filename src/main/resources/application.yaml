@@ -1,8 +1,13 @@
+
+
 spring:
+  config:
+    import: optional:file:.env[.properties]
+
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: 5MB
+      max-request-size: 5MB
 
   main:
     allow-bean-definition-overriding: true
@@ -25,24 +30,25 @@ spring:
       enabled: true
       lifecycle-management: start-only
   mail:
-    host: sandbox.smtp.mailtrap.io
-    port: 2525
-    password: f7a4964915afd3
-    username: 553860333d6328
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
 
 cloud:
   aws:
     credentials:
-      access-key: AKIAYHJANMV6HVGFFT4N
-      secret-key: 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
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
     region:
-      static: eu-west-3
+      static: ${AWS_REGION}
 
 application:
   bucket:
-    name: vrooma
+    name: ${AWS_BUCKET_NAME}
 
 server:
   port: 8082
   servlet:
     context-path: /api/v1
+

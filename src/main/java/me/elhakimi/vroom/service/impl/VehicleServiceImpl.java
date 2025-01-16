@@ -1,6 +1,7 @@
 package me.elhakimi.vroom.service.impl;
 
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import me.elhakimi.vroom.aws.service.StorageService;
 import me.elhakimi.vroom.domain.AppUser;
@@ -11,11 +12,13 @@ import me.elhakimi.vroom.repository.VehicleRepository;
 import me.elhakimi.vroom.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Service
 @AllArgsConstructor
@@ -26,19 +29,32 @@ public class VehicleServiceImpl {
     private final VehicleImagesServiceImpl vehicleImagesServiceImpl;
     private final StorageService storageService;
 
-    public Vehicle save(Vehicle vehicle , MultipartFile[] images){
+    @Transactional
+    public Vehicle save(Vehicle vehicle, MultipartFile[] images) {
 
-        if(images == null || images.length == 0)
-            throw new RuntimeException("Vehicle must have at least one image");
+        if (images == null || images.length == 0) {
+            throw new IllegalArgumentException("Vehicle must have at least one image.");
+        }
 
-        AppUser appUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AppUser appUser = getAuthenticatedUser();
+
         vehicle.setUser(appUser);
         vehicle.setCreatedAt(LocalDateTime.now());
         vehicle.setStatus(VehicleStatus.PENDING);
-        vehicleRepository.save(vehicle);
+
+        if (vehicle.getVehicleImages() == null) {
+            vehicle.setVehicleImages(new ArrayList<>());
+        }
+
+        vehicle = vehicleRepository.save(vehicle);
 
         for (MultipartFile image : images) {
+            validateImage(image);
+
             String imageUrl = storageService.uploadFile(image, appUser.getUsername());
+            if (imageUrl == null || imageUrl.isEmpty()) {
+                throw new RuntimeException("Failed to upload image.");
+            }
 
             VehicleImages vehicleImage = new VehicleImages();
             vehicleImage.setVehicle(vehicle);
@@ -46,10 +62,31 @@ public class VehicleServiceImpl {
             vehicleImage.setCreated_at(LocalDateTime.now());
 
             vehicleImagesServiceImpl.save(vehicleImage);
+            vehicle.getVehicleImages().add(vehicleImage);
         }
 
-        return vehicle ;
+        return vehicle;
     }
+
+    private AppUser getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("User is not authenticated.");
+        }
+        return (AppUser) authentication.getPrincipal();
+    }
+
+    private void validateImage(MultipartFile image) {
+        if (image.getSize() > 5 * 1024 * 1024) {
+            throw new IllegalArgumentException("Image size exceeds the maximum allowed size of 5MB.");
+        }
+
+        String contentType = image.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new IllegalArgumentException("Only image files are allowed.");
+        }
+    }
+
 
 
     public Vehicle update(Vehicle vehicle){
@@ -90,11 +127,13 @@ public class VehicleServiceImpl {
     }
 
     public Vehicle findById(Long id){
-        return vehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle not found"));
+        return vehicleRepository.findByIdWithImages(id).orElseThrow(() -> new RuntimeException("Vehicle not found"));
     }
 
     public Page<Vehicle> findAll(Pageable pageable) {
-        return vehicleRepository.findAll(pageable);
+
+        return vehicleRepository.findAllWithImages(pageable);
+
     }
 
 }

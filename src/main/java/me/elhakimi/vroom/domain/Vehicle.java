@@ -32,8 +32,8 @@ public class Vehicle {
     @Enumerated(EnumType.STRING)
     private VehicleStatus status;
 
-    @OneToMany
-    private List<VehicleImages> articleImages;
+    @OneToMany(mappedBy = "vehicle" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    private List<VehicleImages> vehicleImages;
 
     @ManyToOne
     private AppUser user ;

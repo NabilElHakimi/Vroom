@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import me.elhakimi.vroom.domain.Vehicle;
 import me.elhakimi.vroom.dto.user.response.UserDetails;
+import me.elhakimi.vroom.dto.user.response.VehicleImagesResponse;
 import me.elhakimi.vroom.dto.user.response.VehicleResponse;
 import me.elhakimi.vroom.service.impl.VehicleServiceImpl;
 import org.springframework.boot.context.properties.bind.DefaultValue;
@@ -28,18 +29,16 @@ public class VehicleController {
 
         @PostMapping
         public ResponseEntity<Object> addVehicle(
-                @RequestParam("vehicle") String vehicleJson, // Recevoir les données JSON en tant que chaîne
-                @RequestParam("images") MultipartFile[] images) throws IOException { // Recevoir les fichiers
+                @RequestParam("vehicle") String vehicleJson,
+                @RequestParam("images") MultipartFile[] images) throws IOException {
 
-            // Convertir la chaîne JSON en objet Vehicle
             ObjectMapper objectMapper = new ObjectMapper();
             Vehicle vehicle = objectMapper.readValue(vehicleJson, Vehicle.class);
 
-            // Appeler votre service pour enregistrer le véhicule et les images
             Vehicle saveVehicle = vehicleServiceImpl.save(vehicle, images);
 
             if (saveVehicle != null) {
-                return ResponseEntity.ok(VehicleResponse.from(saveVehicle, UserDetails.from(saveVehicle.getUser())));
+                return ResponseEntity.ok(VehicleResponse.from(saveVehicle, UserDetails.from(saveVehicle.getUser()) , VehicleImagesResponse.from(saveVehicle.getVehicleImages())));
             } else {
                 return ResponseEntity.badRequest().body(vehicle);
             }
@@ -50,7 +49,7 @@ public class VehicleController {
 
             Vehicle updateVehicle = vehicleServiceImpl.update(vehicle);
             if(updateVehicle != null) {
-                return ResponseEntity.ok(VehicleResponse.from(updateVehicle , UserDetails.from(updateVehicle.getUser())));
+                return ResponseEntity.ok(VehicleResponse.from(updateVehicle , UserDetails.from(updateVehicle.getUser()) , VehicleImagesResponse.from(updateVehicle.getVehicleImages())));
             }
             else {
                 return ResponseEntity.badRequest().body(vehicle);
@@ -75,20 +74,20 @@ public class VehicleController {
 
         public ResponseEntity<Object> approveVehicle(@RequestBody Long id) {
             Vehicle vehicle = vehicleServiceImpl.approve(id);
-            return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser())));
+            return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()) , VehicleImagesResponse.from(vehicle.getVehicleImages())));
         }
 
         @PostMapping("/reject")
 
         public ResponseEntity<Object> rejectVehicle(@RequestBody Long id) {
             Vehicle vehicle = vehicleServiceImpl.reject(id);
-            return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser())));
+            return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()) , VehicleImagesResponse.from(vehicle.getVehicleImages())));
         }
 
-        @PostMapping("/find")
-        public ResponseEntity<Object> findVehicle(@RequestBody Long id) {
+        @GetMapping("/find/{id}")
+        public ResponseEntity<Object> findVehicle(@PathVariable Long id) {
             Vehicle vehicle = vehicleServiceImpl.findById(id);
-            return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser())));
+            return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()) , VehicleImagesResponse.from(vehicle.getVehicleImages())));
         }
 
     @GetMapping("/all")
@@ -96,6 +95,6 @@ public class VehicleController {
         PageRequest pageable = PageRequest.of(page-1, size);
         return ResponseEntity.ok(vehicleServiceImpl.findAll(pageable).map(
                 vehicle ->
-                        VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()))));
+                        VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()) , VehicleImagesResponse.from(vehicle.getVehicleImages()))));
     }
 }
