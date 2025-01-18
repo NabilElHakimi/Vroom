@@ -8,14 +8,12 @@ import me.elhakimi.vroom.dto.user.response.UserDetails;
 import me.elhakimi.vroom.dto.user.response.VehicleImagesResponse;
 import me.elhakimi.vroom.dto.user.response.VehicleResponse;
 import me.elhakimi.vroom.service.impl.VehicleServiceImpl;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.print.Pageable;
 import java.io.IOException;
 
 @RestController
