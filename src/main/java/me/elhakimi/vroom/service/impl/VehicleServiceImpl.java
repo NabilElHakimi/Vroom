@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -50,6 +51,7 @@ public class VehicleServiceImpl {
 
         for (MultipartFile image : images) {
             validateImage(image);
+            isValidImageType(Objects.requireNonNull(image.getContentType()));
 
             String imageUrl = storageService.uploadFile(image, appUser.getUsername());
             if (imageUrl == null || imageUrl.isEmpty()) {
@@ -87,7 +89,11 @@ public class VehicleServiceImpl {
         }
     }
 
-
+    private boolean isValidImageType(String contentType) {
+        return contentType.equals("image/jpeg") ||
+                contentType.equals("image/png") ||
+                contentType.equals("image/gif");
+    }
 
     public Vehicle update(Vehicle vehicle){
 
@@ -101,7 +107,6 @@ public class VehicleServiceImpl {
         return vehicleRepository.save(vehicle);
 
     }
-
 
     public void archive(Long id){
         Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle not found"));
