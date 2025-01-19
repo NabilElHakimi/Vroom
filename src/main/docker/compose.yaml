@@ -3,17 +3,14 @@ version: '3.8'
 name: vroom
 services:
   postgres:
-    container_name: vroom-postgres
+    container_name: vroom_db
     image: 'postgres:17'
     environment:
       POSTGRES_DB: vroom
       POSTGRES_USER: vroom
       POSTGRES_PASSWORD: vroom
-    volumes:
-      - postgres_data:/var/lib/postgresql/vroom
     ports:
       - '5433:5432'
-
 volumes:
   postgres_data:
     driver: local
