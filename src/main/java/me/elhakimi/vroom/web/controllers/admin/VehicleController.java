@@ -1,4 +1,4 @@
-package me.elhakimi.vroom.web.admin;
+package me.elhakimi.vroom.web.controllers.admin;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,13 +23,14 @@ import java.io.IOException;
 public class VehicleController {
 
 
+
         private final VehicleServiceImpl vehicleServiceImpl;
 
         @PostMapping
         public ResponseEntity<Object> addVehicle(
                 @RequestParam("vehicle") String vehicleJson,
                 @RequestParam("images") MultipartFile[] images) throws IOException {
-
+            
             ObjectMapper objectMapper = new ObjectMapper();
             Vehicle vehicle = objectMapper.readValue(vehicleJson, Vehicle.class);
 
@@ -95,4 +96,5 @@ public class VehicleController {
                 vehicle ->
                         VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()) , VehicleImagesResponse.from(vehicle.getVehicleImages()))));
     }
+
 }

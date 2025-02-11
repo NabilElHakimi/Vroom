@@ -24,6 +24,7 @@ public class StorageService {
 
     @Autowired
     private AmazonS3 s3Client;
+
     @Autowired
     private AmazonS3 amazonS3;
 
