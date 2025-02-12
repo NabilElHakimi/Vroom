@@ -18,7 +18,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/admin/vehicles")
-@PreAuthorize("hasRole('ADMIN')")
+//@PreAuthorize("hasRole('ADMIN')")
 @AllArgsConstructor
 public class VehicleController {
 
@@ -55,30 +55,30 @@ public class VehicleController {
             }
         }
 
-        @PostMapping("/archive")
 
-        public ResponseEntity<Object> archiveVehicle(@RequestBody Long id) {
+        @GetMapping("/archive/{id}")
+        public ResponseEntity<Object> archiveVehicle(@PathVariable Long id) {
             vehicleServiceImpl.archive(id);
             return ResponseEntity.ok("Vehicle archived successfully");
         }
 
-        @PostMapping("/delete")
-
-        public ResponseEntity<Object> deleteVehicle(@RequestBody Long id) {
+        @GetMapping("/delete/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
+        public ResponseEntity<Object> deleteVehicle(@PathVariable Long id) {
             vehicleServiceImpl.delete(id);
             return ResponseEntity.ok("Vehicle deleted successfully");
         }
 
-        @PostMapping("/approve")
-
-        public ResponseEntity<Object> approveVehicle(@RequestBody Long id) {
+        @GetMapping("/approve/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
+        public ResponseEntity<Object> approveVehicle(@PathVariable Long id) {
             Vehicle vehicle = vehicleServiceImpl.approve(id);
             return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()) , VehicleImagesResponse.from(vehicle.getVehicleImages())));
         }
 
-        @PostMapping("/reject")
-
-        public ResponseEntity<Object> rejectVehicle(@RequestBody Long id) {
+        @GetMapping("/reject/{id}")
+        @PreAuthorize("hasRole('ADMIN')")
+        public ResponseEntity<Object> rejectVehicle(@PathVariable Long id) {
             Vehicle vehicle = vehicleServiceImpl.reject(id);
             return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()) , VehicleImagesResponse.from(vehicle.getVehicleImages())));
         }
