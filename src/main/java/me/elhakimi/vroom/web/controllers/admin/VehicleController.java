@@ -64,35 +64,37 @@ public class VehicleController {
         return ResponseEntity.ok("Vehicle unarchived successfully");
     }
 
-        @GetMapping("/delete/{id}")
-        @PreAuthorize("hasRole('ADMIN')")
-        public ResponseEntity<Object> deleteVehicle(@PathVariable Long id) {
-            vehicleServiceImpl.delete(id);
-            return ResponseEntity.ok("Vehicle deleted successfully");
-        }
+    @GetMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Object> deleteVehicle(@PathVariable Long id) {
+        vehicleServiceImpl.delete(id);
+        return ResponseEntity.ok("Vehicle deleted successfully");
+    }
 
-        @GetMapping("/approve/{id}")
-        @PreAuthorize("hasRole('ADMIN')")
-        public ResponseEntity<Object> approveVehicle(@PathVariable Long id) {
-            Vehicle vehicle = vehicleServiceImpl.approve(id);
-            return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()) , VehicleImagesResponse.from(vehicle.getVehicleImages())));
-        }
+    @GetMapping("/approve/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Object> approveVehicle(@PathVariable Long id) {
+        Vehicle vehicle = vehicleServiceImpl.approve(id);
+        return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()) , VehicleImagesResponse.from(vehicle.getVehicleImages())));
+    }
 
-        @GetMapping("/reject/{id}")
-        @PreAuthorize("hasRole('ADMIN')")
-        public ResponseEntity<Object> rejectVehicle(@PathVariable Long id) {
-            Vehicle vehicle = vehicleServiceImpl.reject(id);
-            return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()) , VehicleImagesResponse.from(vehicle.getVehicleImages())));
-        }
+    @GetMapping("/reject/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Object> rejectVehicle(@PathVariable Long id) {
+        Vehicle vehicle = vehicleServiceImpl.reject(id);
+        return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()) , VehicleImagesResponse.from(vehicle.getVehicleImages())));
+    }
 
-        @GetMapping("/find/{id}")
-        public ResponseEntity<Object> findVehicle(@PathVariable Long id) {
-            Vehicle vehicle = vehicleServiceImpl.findById(id);
-            return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()) , VehicleImagesResponse.from(vehicle.getVehicleImages())));
-        }
+    @GetMapping("/find/{id}")
+    public ResponseEntity<Object> findVehicle(@PathVariable Long id) {
+        Vehicle vehicle = vehicleServiceImpl.findById(id);
+        return ResponseEntity.ok(VehicleResponse.from(vehicle , UserDetails.from(vehicle.getUser()) , VehicleImagesResponse.from(vehicle.getVehicleImages())));
+    }
 
     @GetMapping("/all")
-    public ResponseEntity<Object> findAllVehicles(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<Object> findAllVehicles(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
         PageRequest pageable = PageRequest.of(page-1, size);
         return ResponseEntity.ok(vehicleServiceImpl.findAll(pageable).map(
                 vehicle ->
