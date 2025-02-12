@@ -18,11 +18,8 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/vehicles")
-//@PreAuthorize("hasRole('ADMIN')")
 @AllArgsConstructor
 public class VehicleController {
-
-
 
         private final VehicleServiceImpl vehicleServiceImpl;
 
@@ -61,6 +58,12 @@ public class VehicleController {
             vehicleServiceImpl.archive(id);
             return ResponseEntity.ok("Vehicle archived successfully");
         }
+
+    @GetMapping("/unArchive/{id}")
+    public ResponseEntity<Object> deArchiveVehicle(@PathVariable Long id) {
+        vehicleServiceImpl.unArchive(id);
+        return ResponseEntity.ok("Vehicle unarchived successfully");
+    }
 
         @GetMapping("/delete/{id}")
         @PreAuthorize("hasRole('ADMIN')")

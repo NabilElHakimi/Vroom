@@ -114,6 +114,13 @@ public class VehicleServiceImpl {
         vehicleRepository.save(vehicle);
     }
 
+    public void unArchive(Long id){
+        Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle not found"));
+        vehicle.setArchived(false);
+        vehicleRepository.save(vehicle);
+    }
+    
+    
     public void delete(Long id){
         Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Vehicle not found"));
         vehicleRepository.delete(vehicle);
