@@ -21,24 +21,24 @@ import java.io.IOException;
 @AllArgsConstructor
 public class VehicleController {
 
-        private final VehicleServiceImpl vehicleServiceImpl;
+    private final VehicleServiceImpl vehicleServiceImpl;
 
-        @PostMapping
-        public ResponseEntity<Object> addVehicle(
-                @RequestParam("vehicle") String vehicleJson,
-                @RequestParam("images") MultipartFile[] images) throws IOException {
-            
-            ObjectMapper objectMapper = new ObjectMapper();
-            Vehicle vehicle = objectMapper.readValue(vehicleJson, Vehicle.class);
+    @PostMapping
+    public ResponseEntity<Object> addVehicle(
+            @RequestParam("vehicle") String vehicleJson,
+            @RequestParam("images") MultipartFile[] images) throws IOException {
 
-            Vehicle saveVehicle = vehicleServiceImpl.save(vehicle, images);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Vehicle vehicle = objectMapper.readValue(vehicleJson, Vehicle.class);
 
-            if (saveVehicle != null) {
-                return ResponseEntity.ok(VehicleResponse.from(saveVehicle, UserDetails.from(saveVehicle.getUser()) , VehicleImagesResponse.from(saveVehicle.getVehicleImages())));
-            } else {
-                return ResponseEntity.badRequest().body(vehicle);
-            }
+        Vehicle saveVehicle = vehicleServiceImpl.save(vehicle, images);
+
+        if (saveVehicle != null) {
+            return ResponseEntity.ok(VehicleResponse.from(saveVehicle, UserDetails.from(saveVehicle.getUser()) , VehicleImagesResponse.from(saveVehicle.getVehicleImages())));
+        } else {
+            return ResponseEntity.badRequest().body(vehicle);
         }
+    }
 
     @PostMapping("/update")
         public ResponseEntity<Object> updateVehicle(@RequestBody Vehicle vehicle) {
@@ -52,12 +52,11 @@ public class VehicleController {
             }
         }
 
-
-        @GetMapping("/archive/{id}")
-        public ResponseEntity<Object> archiveVehicle(@PathVariable Long id) {
-            vehicleServiceImpl.archive(id);
-            return ResponseEntity.ok("Vehicle archived successfully");
-        }
+    @GetMapping("/archive/{id}")
+    public ResponseEntity<Object> archiveVehicle(@PathVariable Long id) {
+        vehicleServiceImpl.archive(id);
+        return ResponseEntity.ok("Vehicle archived successfully");
+    }
 
     @GetMapping("/unArchive/{id}")
     public ResponseEntity<Object> deArchiveVehicle(@PathVariable Long id) {
