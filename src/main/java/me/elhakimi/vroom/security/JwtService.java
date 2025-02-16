@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import me.elhakimi.vroom.domain.AppUser;
 import me.elhakimi.vroom.service.UserService;
@@ -102,14 +104,24 @@ public class JwtService {
 
     }
 
-    public Map<String , String > getRefreshTokenAndAccessToken(String username){
+    public Map<String, String> getRefreshTokenAndAccessToken(String username, HttpServletResponse response) {
         Map<String, String> refreshToken = this.generateRefreshToken(username);
         AppUser appUser = userService.loadUserByUsername(username);
+
         appUser.setRefreshToken(refreshToken.get("refreshToken"));
         userService.saveRefreshToken(appUser);
-        Map<String, String> accessToken = this.generateToken(username);
-        return Map.of("refreshToken" , refreshToken.get("refreshToken") , "token" , accessToken.get("token"));
 
+        Map<String, String> accessToken = this.generateToken(username);
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.get("refreshToken"));
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60);
+
+        response.addCookie(refreshTokenCookie);
+
+        return Map.of("token", accessToken.get("token"));
     }
 
     public Map<String, String> generateNewToken(String rToken) {

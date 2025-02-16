@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 
 @RestController
@@ -94,7 +93,7 @@ public class VehicleController {
     @GetMapping("/all")
     public ResponseEntity<Object> findAllVehicles(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "9") int size) {
         PageRequest pageable = PageRequest.of(page-1, size);
         return ResponseEntity.ok(vehicleServiceImpl.findAll(pageable).map(
                 vehicle ->

@@ -1,6 +1,9 @@
 package me.elhakimi.vroom.web.controllers.auth;
 
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import me.elhakimi.vroom.dto.user.request.*;
 import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
@@ -46,23 +49,43 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String , String> login(@RequestBody LoginRequestDTO user){
-            final Authentication authenticate = authenticationManager.authenticate(
+    public Map<String, String> login(@RequestBody LoginRequestDTO user, HttpServletResponse response) {
+        try {
+            Authentication authenticate = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.username(), user.password())
             );
 
-            if(authenticate.isAuthenticated()){
-                return jwtService.getRefreshTokenAndAccessToken(user.username());
+            if (authenticate.isAuthenticated()) {
+                Map<String, String> tokens = jwtService.getRefreshTokenAndAccessToken(user.username(), response);
+
+                return Map.of("token", tokens.get("token"));
+            } else {
+                return Map.of("message", "Invalid credentials");
             }
-
+        } catch (Exception e) {
             return Map.of("message", "Invalid credentials");
-
+        }
     }
 
     @PostMapping("/refresh-token")
-    public Map<String, String> refresh(@RequestParam String refreshToken){
-        return  jwtService.generateNewToken(refreshToken);
+    public Map<String, String> refresh(HttpServletRequest request) {
+        String refreshToken = null;
+        Cookie[] cookies = request.getCookies();
 
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("refreshToken".equals(cookie.getName())) {
+                    refreshToken = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (refreshToken == null) {
+            return Map.of("message", "Refresh token not found");
+        }
+
+        return jwtService.generateNewToken(refreshToken);
     }
 
     @PostMapping("/logout")
