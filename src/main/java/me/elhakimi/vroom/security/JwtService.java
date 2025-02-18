@@ -41,8 +41,7 @@ public class JwtService {
 
         final String bearer = Jwts.builder()
                 .issuedAt(new Date(currentTime))
-//                .expiration(new Date(currentTime + 15 * 60 * 1000))
-                .expiration(new Date(currentTime + 5 * 1000))
+                .expiration(new Date(currentTime + 15 * 60 * 1000))
                 .subject(appUser.getUsername())
                 .claims(claims)
                 .signWith(getKeySecretKey())
@@ -96,7 +95,7 @@ public class JwtService {
         String rToken =   Jwts.builder()
                 .issuedAt(new Date(currentTime))
                 .subject(username)
-                .expiration(new Date(currentTime + 30L * 24 * 60 * 60 * 1000))
+                .expiration(new Date(currentTime + 15L * 24 * 60 * 60 * 1000))
                 .signWith(getKeySecretKey())
                 .compact();
 
@@ -115,11 +114,11 @@ public class JwtService {
 
         // Créez le cookie refreshToken
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.get("refreshToken"));
-        refreshTokenCookie.setHttpOnly(true);  // Cookie uniquement accessible par HTTP
-        refreshTokenCookie.setSecure(true);   // Mettre à true en production (si HTTPS)
-        refreshTokenCookie.setPath("/");       // Le cookie est disponible sur toute l'application
-        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60);  // Durée de vie 7 jours
-        refreshTokenCookie.setAttribute("SameSite", "None");  // Autoriser les cookies cross-origin en mode CORS
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(15 * 24 * 60 * 60);
+        refreshTokenCookie.setAttribute("SameSite", "None");
 
         // Ajoute le cookie dans la réponse
         response.addCookie(refreshTokenCookie);
