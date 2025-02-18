@@ -42,7 +42,7 @@ public class JwtService {
         final String bearer = Jwts.builder()
                 .issuedAt(new Date(currentTime))
 //                .expiration(new Date(currentTime + 15 * 60 * 1000))
-                .expiration(new Date(currentTime + 7 * 60 * 60 * 1000))
+                .expiration(new Date(currentTime + 5 * 1000))
                 .subject(appUser.getUsername())
                 .claims(claims)
                 .signWith(getKeySecretKey())
@@ -113,16 +113,20 @@ public class JwtService {
 
         Map<String, String> accessToken = this.generateToken(username);
 
+        // Créez le cookie refreshToken
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.get("refreshToken"));
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(true);
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60);
+        refreshTokenCookie.setHttpOnly(true);  // Cookie uniquement accessible par HTTP
+        refreshTokenCookie.setSecure(true);   // Mettre à true en production (si HTTPS)
+        refreshTokenCookie.setPath("/");       // Le cookie est disponible sur toute l'application
+        refreshTokenCookie.setMaxAge(7 * 24 * 60 * 60);  // Durée de vie 7 jours
+        refreshTokenCookie.setAttribute("SameSite", "None");  // Autoriser les cookies cross-origin en mode CORS
 
+        // Ajoute le cookie dans la réponse
         response.addCookie(refreshTokenCookie);
 
         return Map.of("token", accessToken.get("token"));
     }
+
 
     public Map<String, String> generateNewToken(String rToken) {
 

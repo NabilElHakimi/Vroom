@@ -70,8 +70,8 @@ public class AuthController {
     @PostMapping("/refresh-token")
     public Map<String, String> refresh(HttpServletRequest request) {
         String refreshToken = null;
-        Cookie[] cookies = request.getCookies();
 
+        Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if ("refreshToken".equals(cookie.getName())) {
@@ -87,6 +87,7 @@ public class AuthController {
 
         return jwtService.generateNewToken(refreshToken);
     }
+
 
     @PostMapping("/logout")
     public void logout(@RequestParam String refreshToken){
