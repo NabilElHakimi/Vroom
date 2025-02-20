@@ -26,8 +26,13 @@ public class Model {
     @ManyToOne
     private Mark mark;
 
+    private int horsepower;
+    private double acceleration;
+    private int year;
+
     private LocalDateTime updated_at;
     private LocalDateTime created_at;
+
 
 
 }

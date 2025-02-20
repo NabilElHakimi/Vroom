@@ -49,6 +49,8 @@
             @OneToOne(mappedBy = "vehicle")
             private Model model;
 
+            private Long mileage ;
+
             private LocalDateTime createdAt;
             private LocalDateTime updatedAt;
 
