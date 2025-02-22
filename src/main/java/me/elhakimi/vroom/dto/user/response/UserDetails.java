@@ -6,15 +6,16 @@ public record UserDetails(
         String first_name,
         String username,
         String email,
-        String last_name
+        String last_name ,
+        String image
 ) {
     public static UserDetails from(AppUser appUser) {
         return new UserDetails(
                 appUser.getFirst_name(),
                 appUser.getUsername(),
                 appUser.getEmail(),
-                appUser.getLast_name()
-
+                appUser.getLast_name(),
+                appUser.getImageUrl()
         );
     }
 }

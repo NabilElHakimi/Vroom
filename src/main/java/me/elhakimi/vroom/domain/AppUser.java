@@ -35,6 +35,7 @@ public class AppUser implements UserDetails {
     private Instant createdAt ;
     private Instant expiresAt  ;
     private String refreshToken;
+    private String imageUrl;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Role role;

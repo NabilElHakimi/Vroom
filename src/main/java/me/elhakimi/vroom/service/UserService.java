@@ -6,6 +6,7 @@ import me.elhakimi.vroom.dto.user.request.RegisterUserRequestDTO;
 import me.elhakimi.vroom.dto.user.request.RestPassword;
 import me.elhakimi.vroom.dto.user.request.UserValidationRequest;
 import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService  {
     RegisterUserResponseDTO save(RegisterUserRequestDTO user);
@@ -30,4 +31,7 @@ public interface UserService  {
     boolean forgotPassword(String email);
 
     boolean resetPassword(RestPassword restPassword);
+
+    AppUser addImage(MultipartFile imageUrl , String username);
+
 }

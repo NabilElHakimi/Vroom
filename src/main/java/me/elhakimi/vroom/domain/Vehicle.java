@@ -1,7 +1,9 @@
         package me.elhakimi.vroom.domain;
 
         import jakarta.persistence.*;
+        import jakarta.validation.constraints.Min;
         import lombok.*;
+        import me.elhakimi.vroom.domain.enums.FuelType;
         import me.elhakimi.vroom.domain.enums.VehicleStatus;
         import me.elhakimi.vroom.domain.enums.VehicleType;
 
@@ -25,9 +27,10 @@
             @Column(columnDefinition = "TEXT")
             private String description ;
             private String telephone ;
+
+            @Min(0)
             private double price ;
-            private boolean isPublished = false;
-            private boolean isArchived = false;
+
             @Enumerated(EnumType.STRING)
             private VehicleType type;
 
@@ -43,13 +46,19 @@
             @OneToMany(mappedBy = "vehicle")
             private List<Likes> likes;
 
-            @OneToOne
-            private City city;
+            private String city;
 
             @OneToOne(mappedBy = "vehicle")
             private Model model;
 
+            @Min(0)
             private Long mileage ;
+
+            @Enumerated(EnumType.STRING)
+            private FuelType fuelType;
+
+            private boolean isPublished = false;
+            private boolean isArchived = false;
 
             private LocalDateTime createdAt;
             private LocalDateTime updatedAt;

@@ -1,6 +1,7 @@
 package me.elhakimi.vroom.service.impl;
 
 import lombok.AllArgsConstructor;
+import me.elhakimi.vroom.aws.service.StorageService;
 import me.elhakimi.vroom.domain.AppUser;
 import me.elhakimi.vroom.domain.Role;
 import me.elhakimi.vroom.domain.enums.TypeRole;
@@ -14,10 +15,14 @@ import me.elhakimi.vroom.dto.user.response.mapper.RegisterUserResponseMapper;
 import me.elhakimi.vroom.repository.UserRepository;
 import me.elhakimi.vroom.service.UserService;
 import me.elhakimi.vroom.utils.EmailSenderUtil;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.util.Random;
@@ -32,6 +37,8 @@ public class UserServiceImpl implements UserService , UserDetailsService {
     private final RegisterUserResponseMapper registerUserResponseMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final EmailSenderUtil emailSenderUtil;
+    private final StringHttpMessageConverter stringHttpMessageConverter;
+    private final StorageService storageService;
 
     @Override
     public AppUser loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -225,5 +232,47 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         this.userRepository.save(user);
 
     }
+
+
+    @Override
+    public AppUser addImage(MultipartFile imageUrl, String username) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("User is not authenticated.");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof AppUser)) {
+            throw new SecurityException("Invalid user authentication.");
+        }
+        AppUser user = (AppUser) principal;
+
+        if (!user.getUsername().equals(username)) {
+            throw new SecurityException("You are not allowed to update this user.");
+        }
+
+        if (imageUrl.getSize() > 5 * 1024 * 1024) {
+            throw new IllegalArgumentException("Image size exceeds the maximum allowed size of 5MB.");
+        }
+
+        String contentType = imageUrl.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new IllegalArgumentException("Only image files are allowed.");
+        }
+
+        System.out.println("Image size: " + imageUrl.getSize());
+        System.out.println("Username: " + user.getUsername());
+
+        String imageSaved = storageService.uploadFile(imageUrl, user.getUsername());
+
+        AppUser managedUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        managedUser.setImageUrl(imageSaved);
+        return userRepository.save(managedUser);
+    }
+
+
+
 
 }

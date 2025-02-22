@@ -17,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -114,6 +115,14 @@ public class AuthController {
             return ResponseUtil.successResponse("Password reset code sent to email");
         }
         return ResponseUtil.errorResponse("Bad Request", "Password reset failed", HttpStatus.BAD_REQUEST);
+    }
+
+
+    @PostMapping("/add-image")
+    public ResponseEntity<Object> addImage(@RequestParam("imageFile") MultipartFile imageFile,
+                                           @RequestParam("username") String username) {
+        userService.addImage(imageFile , username);
+        return ResponseUtil.successResponse("Image added successfully");
     }
 
 }

@@ -1,6 +1,7 @@
 package me.elhakimi.vroom.dto.user.response;
 
 import me.elhakimi.vroom.domain.*;
+import me.elhakimi.vroom.domain.enums.FuelType;
 import me.elhakimi.vroom.domain.enums.VehicleStatus;
 
 import java.time.LocalDateTime;
@@ -18,8 +19,10 @@ public record VehicleResponse (
         List<VehicleImagesResponse> articleImages,
         UserDetails userDetails,
         List<Likes> likes,
-        City city,
+        String city,
         Model model,
+        FuelType fuelType,
+        Long mileage,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
@@ -39,6 +42,8 @@ public record VehicleResponse (
                 vehicle.getLikes(),
                 vehicle.getCity(),
                 vehicle.getModel(),
+                vehicle.getFuelType(),
+                vehicle.getMileage(),
                 vehicle.getCreatedAt(),
                 vehicle.getUpdatedAt()
         );
