@@ -4,6 +4,7 @@ package me.elhakimi.vroom.web.controllers.admin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import me.elhakimi.vroom.domain.Vehicle;
+import me.elhakimi.vroom.dto.user.request.VehicleWithLocationRequestDTO;
 import me.elhakimi.vroom.dto.user.response.UserDetailsResponseDTO;
 import me.elhakimi.vroom.dto.user.response.VehicleImagesResponseDTO;
 import me.elhakimi.vroom.dto.user.response.VehicleWithLocationResponseDTO;
@@ -28,14 +29,21 @@ public class VehicleController {
             @RequestParam("images") MultipartFile[] images) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
-        Vehicle vehicle = objectMapper.readValue(vehicleJson, Vehicle.class);
 
-        Vehicle saveVehicle = vehicleServiceImpl.save(vehicle, images);
+        VehicleWithLocationRequestDTO vehicleDTO = objectMapper.readValue(vehicleJson, VehicleWithLocationRequestDTO.class);
 
-        if (saveVehicle != null) {
-            return ResponseEntity.ok(VehicleWithLocationResponseDTO.from(saveVehicle, UserDetailsResponseDTO.from(saveVehicle.getUser()) , VehicleImagesResponseDTO.from(saveVehicle.getVehicleImages())));
+        Vehicle savedVehicle = vehicleServiceImpl.save(vehicleDTO, images);
+
+        if (savedVehicle != null) {
+            return ResponseEntity.ok(
+                    VehicleWithLocationResponseDTO.from(
+                            savedVehicle,
+                            UserDetailsResponseDTO.from(savedVehicle.getUser()),
+                            VehicleImagesResponseDTO.from(savedVehicle.getVehicleImages())
+                    )
+            );
         } else {
-            return ResponseEntity.badRequest().body(vehicle);
+            return ResponseEntity.badRequest().body("Failed to save vehicle.");
         }
     }
 

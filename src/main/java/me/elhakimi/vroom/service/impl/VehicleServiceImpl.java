@@ -8,6 +8,7 @@ import me.elhakimi.vroom.domain.AppUser;
 import me.elhakimi.vroom.domain.Vehicle;
 import me.elhakimi.vroom.domain.VehicleImages;
 import me.elhakimi.vroom.domain.enums.VehicleStatus;
+import me.elhakimi.vroom.dto.user.request.VehicleWithLocationRequestDTO;
 import me.elhakimi.vroom.repository.VehicleRepository;
 import me.elhakimi.vroom.service.UserService;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,7 @@ public class VehicleServiceImpl {
     private final StorageService storageService;
 
     @Transactional
-    public Vehicle save(Vehicle vehicle, MultipartFile[] images) {
+    public Vehicle save(VehicleWithLocationRequestDTO vehicleDTO, MultipartFile[] images) {
 
         if (images == null || images.length == 0) {
             throw new IllegalArgumentException("Vehicle must have at least one image.");
@@ -39,6 +40,7 @@ public class VehicleServiceImpl {
 
         AppUser appUser = getAuthenticatedUser();
 
+        Vehicle vehicle = VehicleWithLocationRequestDTO.toVehicle(vehicleDTO);
         vehicle.setUser(appUser);
         vehicle.setCreatedAt(LocalDateTime.now());
         vehicle.setStatus(VehicleStatus.PENDING);
@@ -49,9 +51,21 @@ public class VehicleServiceImpl {
 
         vehicle = vehicleRepository.save(vehicle);
 
+        processAndSaveVehicleImages(vehicle, images, appUser);
+
+        return vehicle;
+    }
+
+    private void processAndSaveVehicleImages(Vehicle vehicle, MultipartFile[] images, AppUser appUser) {
         for (MultipartFile image : images) {
-            validateImage(image);
-            isValidImageType(Objects.requireNonNull(image.getContentType()));
+            if (image.isEmpty()) {
+                throw new IllegalArgumentException("One of the uploaded images is empty.");
+            }
+
+            String contentType = image.getContentType();
+            if (contentType == null || !isValidImageType(contentType)) {
+                throw new IllegalArgumentException("Invalid image type.");
+            }
 
             String imageUrl = storageService.uploadFile(image, appUser.getUsername());
             if (imageUrl == null || imageUrl.isEmpty()) {
@@ -66,9 +80,15 @@ public class VehicleServiceImpl {
             vehicleImagesServiceImpl.save(vehicleImage);
             vehicle.getVehicleImages().add(vehicleImage);
         }
-
-        return vehicle;
     }
+
+    private boolean isValidImageType(String contentType) {
+        return contentType.equals("image/png") ||
+                contentType.equals("image/jpeg") ||
+                contentType.equals("image/jpg") ||
+                contentType.equals("image/webp");
+    }
+
 
     private AppUser getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -87,12 +107,6 @@ public class VehicleServiceImpl {
         if (contentType == null || !contentType.startsWith("image/")) {
             throw new IllegalArgumentException("Only image files are allowed.");
         }
-    }
-
-    private boolean isValidImageType(String contentType) {
-        return contentType.equals("image/jpeg") ||
-                contentType.equals("image/png") ||
-                contentType.equals("image/gif");
     }
 
     public Vehicle update(Vehicle vehicle){
