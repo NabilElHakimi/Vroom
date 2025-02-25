@@ -1,5 +1,6 @@
 package me.elhakimi.vroom.domain;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.UniqueElements;
@@ -35,7 +36,9 @@ public class AppUser implements UserDetails {
     private Instant createdAt ;
     private Instant expiresAt  ;
     private String refreshToken;
-    private String imageUrl;
+
+    @Nullable
+    private String imageUrl = null;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Role role;

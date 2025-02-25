@@ -20,12 +20,16 @@
             @Id
             @GeneratedValue(strategy = GenerationType.SEQUENCE)
             @Column(nullable = false)
-
             private Long id;
-            private String title;
+
+            private String mark;
+            private String model;
+
+            private String codeCar;
 
             @Column(columnDefinition = "TEXT")
             private String description ;
+
             private String telephone ;
 
             @Min(0)
@@ -48,17 +52,24 @@
 
             private String city;
 
-            @OneToOne(mappedBy = "vehicle")
-            private Model model;
-
             @Min(0)
             private Long mileage ;
 
             @Enumerated(EnumType.STRING)
             private FuelType fuelType;
 
+            private int year;
+            private Double pricePerDay;
+
             private boolean isPublished = false;
             private boolean isArchived = false;
+
+
+            @OneToMany(mappedBy = "vehicle")
+            private List<Reservation> reservations;
+
+            @ManyToOne
+            private Location location;
 
             private LocalDateTime createdAt;
             private LocalDateTime updatedAt;

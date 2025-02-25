@@ -7,30 +7,35 @@ import me.elhakimi.vroom.domain.enums.VehicleStatus;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record VehicleResponse (
+public record VehicleWithLocationResponseDTO(
         Long id,
-        String title,
+        String codeCar ,
+        String mark,
+        String model,
         String description,
         String telephone,
         double price,
         boolean isPublished,
         boolean isArchived,
         VehicleStatus status,
-        List<VehicleImagesResponse> articleImages,
-        UserDetails userDetails,
+        List<VehicleImagesResponseDTO> articleImages,
+        UserDetailsResponseDTO userDetailsResponseDTO,
         List<Likes> likes,
         String city,
-        Model model,
         FuelType fuelType,
         Long mileage,
+        int year,
+        LocationWithoutVehicleResponseDTO location,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {
 
-    public static VehicleResponse from(Vehicle vehicle, UserDetails userDetails , List<VehicleImagesResponse> VehicleImagesResponse) {
-        return new VehicleResponse(
+    public static VehicleWithLocationResponseDTO from(Vehicle vehicle, UserDetailsResponseDTO userDetailsResponseDTO, List<VehicleImagesResponseDTO> VehicleImagesResponse) {
+        return new VehicleWithLocationResponseDTO(
                 vehicle.getId(),
-                vehicle.getTitle(),
+                vehicle.getCodeCar(),
+                vehicle.getMark(),
+                vehicle.getModel(),
                 vehicle.getDescription(),
                 vehicle.getTelephone(),
                 vehicle.getPrice(),
@@ -38,12 +43,13 @@ public record VehicleResponse (
                 vehicle.isArchived(),
                 vehicle.getStatus(),
                 VehicleImagesResponse,
-                userDetails,
+                userDetailsResponseDTO,
                 vehicle.getLikes(),
                 vehicle.getCity(),
-                vehicle.getModel(),
                 vehicle.getFuelType(),
                 vehicle.getMileage(),
+                vehicle.getYear(),
+                vehicle.getLocation() != null ? LocationWithoutVehicleResponseDTO.from(vehicle.getLocation()) : null,
                 vehicle.getCreatedAt(),
                 vehicle.getUpdatedAt()
         );

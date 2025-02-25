@@ -12,6 +12,7 @@ import me.elhakimi.vroom.dto.user.request.UserValidationRequest;
 import me.elhakimi.vroom.dto.user.request.mapper.RegisterUserRequestMapper;
 import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
 import me.elhakimi.vroom.dto.user.response.mapper.RegisterUserResponseMapper;
+import me.elhakimi.vroom.exception.exceptions.UserValidationException;
 import me.elhakimi.vroom.repository.UserRepository;
 import me.elhakimi.vroom.service.UserService;
 import me.elhakimi.vroom.utils.EmailSenderUtil;
@@ -105,7 +106,6 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         userRepository.save(user);
     }
 
-
     @Override
     public boolean changePassword(ChangePassword changePassword) {
 
@@ -181,12 +181,12 @@ public class UserServiceImpl implements UserService , UserDetailsService {
     @Override
     public void resendValidation(String username) {
         AppUser user = userRepository.findAppUsersByUsername(username);
-        if(user == null){
-            throw new IllegalArgumentException("Invalid username");
+        if (user == null) {
+            throw new UserValidationException("Invalid username");
         }
 
-        if(user.isActif()){
-            throw new IllegalArgumentException("User already activated Try with login");
+        if (user.isActif()) {
+            throw new UserValidationException("User already activated. Try with login.");
         }
 
         Random random = new Random();
@@ -200,6 +200,7 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         sendActivationEmail(user);
     }
 
+
     public void sendActivationEmail(AppUser user) {
         {
             emailSenderUtil.sendActivationEmail(
@@ -210,26 +211,27 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         }
     }
 
-    public void validateUser(UserValidationRequest validationRequest) {
+    public String validateUser(UserValidationRequest validationRequest) {
 
         AppUser user = userRepository.findAppUsersByActivationCode(validationRequest.getCode());
         if (user == null) {
-            throw new IllegalArgumentException("Invalid code");
+            return "Invalid code";
         }
         if (user.isUsedCode()) {
-            throw new IllegalArgumentException("Code already used");
+                return  "Code already used";
         }
         if (user.getExpiresAt().isBefore(Instant.now())) {
-            throw new IllegalArgumentException("Code expired");
+             return "Code expired";
         }
 
         if(!user.getUsername().equals(validationRequest.getUsername())){
-            throw new IllegalArgumentException("Invalid username");
+            return "Invalid username";
         }
 
         user.setActif(true);
         user.setUsedCode(true);
         this.userRepository.save(user);
+        return "Account activated successfully";
 
     }
 

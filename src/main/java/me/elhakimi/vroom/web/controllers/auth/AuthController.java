@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -40,14 +41,24 @@ public class AuthController {
     }
 
     @PostMapping("/validate")
-    public void validate(@RequestBody UserValidationRequest userValidationRequest){
-        userService.validateUser(userValidationRequest);
+    public ResponseEntity<Map<String, String>> validate(@RequestBody UserValidationRequest userValidationRequest) {
+        String message = userService.validateUser(userValidationRequest);
+        Map<String, String> response = Map.of("message", message);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/resend")
-    public void resendValidation(@RequestParam String username){
+    public ResponseEntity<Map<String, Object>> resendValidation(@RequestParam String username) {
         userService.resendValidation(username);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", "Validation code resent successfully.");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
 
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody LoginRequestDTO user, HttpServletResponse response) {

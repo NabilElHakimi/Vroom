@@ -46,10 +46,10 @@ public class SecurityConfig {
                 })
                 .authorizeHttpRequests(authorize ->
                             authorize
-//                                    .anyRequest().permitAll()
-                                    .requestMatchers(POST  ,"/auth/**").permitAll()
-                                    .requestMatchers(GET, "/auth/**").permitAll()
-                                    .anyRequest().authenticated()
+                                    .anyRequest().permitAll()
+//                                    .requestMatchers(POST  ,"/auth/**").permitAll()
+//                                    .requestMatchers(GET, "/auth/**").permitAll()
+//                                    .anyRequest().authenticated()
                         )
 
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->

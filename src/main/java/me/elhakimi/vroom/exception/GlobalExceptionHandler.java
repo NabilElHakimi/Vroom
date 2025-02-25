@@ -1,5 +1,6 @@
 package me.elhakimi.vroom.exception;
 
+import me.elhakimi.vroom.exception.exceptions.UserValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,6 +29,17 @@ public class GlobalExceptionHandler {
         response.put("error", error);
         response.put("message", message);
         return response;
-        
+
     }
+
+    @ExceptionHandler(UserValidationException.class)
+    public ResponseEntity<Map<String, Object>> handleUserValidationException(UserValidationException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String error = "Bad Request";
+        Map<String, Object> response = createResponse(status, error, ex.getMessage());
+        return new ResponseEntity<>(response, status);
+    }
+
+
+
 }
