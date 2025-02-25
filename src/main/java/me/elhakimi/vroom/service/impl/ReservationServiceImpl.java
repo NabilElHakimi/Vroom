@@ -4,9 +4,13 @@ import lombok.AllArgsConstructor;
 import me.elhakimi.vroom.domain.AppUser;
 import me.elhakimi.vroom.domain.Reservation;
 import me.elhakimi.vroom.domain.Vehicle;
+import me.elhakimi.vroom.domain.enums.ReservationStatus;
 import me.elhakimi.vroom.dto.user.request.ReservationRequestDTO;
+import me.elhakimi.vroom.dto.user.response.ReservationResponseDTO;
 import me.elhakimi.vroom.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 import static me.elhakimi.vroom.utils.DatesUtil.getDifferenceInDays;
 import static me.elhakimi.vroom.utils.UserUtil.getAuthenticatedUser;
@@ -18,7 +22,7 @@ public class ReservationServiceImpl {
     private final ReservationRepository reservationRepository;
     private final VehicleServiceImpl vehicleService;
 
-    public Reservation save(ReservationRequestDTO reservationDTO) {
+    public ReservationResponseDTO save(ReservationRequestDTO reservationDTO) {
 
         Vehicle vehicle = vehicleService.findById(reservationDTO.vehicleId());
 
@@ -34,11 +38,11 @@ public class ReservationServiceImpl {
         reservation.setStartDate(reservationDTO.startDate());
         reservation.setEndDate(reservationDTO.endDate());
         reservation.setTotalPrice(
-                vehicle.getPricePerDay() * getDifferenceInDays(reservationDTO.startDate(), reservationDTO.endDate()));
+                vehicle.getPrice() * getDifferenceInDays(reservationDTO.startDate(), reservationDTO.endDate()));
+        reservation.setStatus(ReservationStatus.PENDING);
+        reservation.setCreatedAt(LocalDateTime.now());
 
-        return reservationRepository.save(reservation);
-
-
+        return ReservationResponseDTO.from(reservationRepository.save(reservation));
 
     }
 

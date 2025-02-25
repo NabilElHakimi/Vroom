@@ -23,7 +23,6 @@ public record VehicleWithLocationRequestDTO(
         List<VehicleImagesResponseDTO> articleImages,
         String city,
         FuelType fuelType,
-        Long mileage,
         int year,
         Long locationId
 ) {
@@ -40,7 +39,6 @@ public record VehicleWithLocationRequestDTO(
                 VehicleImagesResponse,
                 vehicle.getCity(),
                 vehicle.getFuelType(),
-                vehicle.getMileage(),
                 vehicle.getYear(),
                 vehicle.getLocation().getId()
 
@@ -61,7 +59,6 @@ public record VehicleWithLocationRequestDTO(
                 .price(dto.price())
                 .city(dto.city())
                 .fuelType(dto.fuelType())
-                .mileage(dto.mileage())
                 .year(dto.year())
                 .location(location)
                 .build();

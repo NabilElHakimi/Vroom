@@ -24,7 +24,6 @@ public record VehicleWithOutLocationResponseDTO(
         List<Likes> likes,
         String city,
         FuelType fuelType,
-        Long mileage,
         int year,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
@@ -47,7 +46,6 @@ public record VehicleWithOutLocationResponseDTO(
                 vehicle.getLikes(),
                 vehicle.getCity(),
                 vehicle.getFuelType(),
-                vehicle.getMileage(),
                 vehicle.getYear(),
                 vehicle.getCreatedAt(),
                 vehicle.getUpdatedAt()
@@ -72,7 +70,6 @@ public record VehicleWithOutLocationResponseDTO(
                         vehicle.getLikes(),
                         vehicle.getCity(),
                         vehicle.getFuelType(),
-                        vehicle.getMileage(),
                         vehicle.getYear(),
                         vehicle.getCreatedAt(),
                         vehicle.getUpdatedAt()

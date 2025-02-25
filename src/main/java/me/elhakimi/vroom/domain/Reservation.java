@@ -1,12 +1,11 @@
 package me.elhakimi.vroom.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import me.elhakimi.vroom.domain.enums.ReservationStatus;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -18,6 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class Reservation {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @ManyToOne
@@ -28,8 +28,12 @@ public class Reservation {
 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private String status;
-    private String paymentMethod;
+
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
     private Double totalPrice;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 }

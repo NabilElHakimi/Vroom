@@ -52,14 +52,10 @@
 
             private String city;
 
-            @Min(0)
-            private Long mileage ;
-
             @Enumerated(EnumType.STRING)
             private FuelType fuelType;
 
             private int year;
-            private Double pricePerDay;
 
             private boolean isPublished = false;
             private boolean isArchived = false;
