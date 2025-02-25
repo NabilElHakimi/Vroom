@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static me.elhakimi.vroom.utils.UserUtil.getAuthenticatedUser;
+
 @Service
 @AllArgsConstructor
 public class VehicleServiceImpl {
@@ -90,13 +92,6 @@ public class VehicleServiceImpl {
     }
 
 
-    private AppUser getAuthenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new SecurityException("User is not authenticated.");
-        }
-        return (AppUser) authentication.getPrincipal();
-    }
 
     private void validateImage(MultipartFile image) {
         if (image.getSize() > 5 * 1024 * 1024) {
