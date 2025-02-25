@@ -19,7 +19,7 @@ public class LocationServiceImpl {
 
         Location checkLocation = locationRepository.findByName(location.getName());
         if (checkLocation != null) {
-                throw new LocationAlreadyExistException( location.getName());
+                throw new LocationAlreadyExistException(location.getName());
         }
 
         return locationRepository.save(location);
