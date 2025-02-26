@@ -11,6 +11,7 @@ import me.elhakimi.vroom.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static me.elhakimi.vroom.utils.DatesUtil.getDifferenceInDays;
 import static me.elhakimi.vroom.utils.UserUtil.getAuthenticatedUser;
@@ -30,6 +31,13 @@ public class ReservationServiceImpl {
             throw new IllegalArgumentException("Vehicle not found");
         }
 
+
+        List<Reservation> reservations = findAllByVehicleId(reservationDTO.vehicleId());
+
+        if (!checkIfVehicleIsAvailable(reservations, reservationDTO.startDate(), reservationDTO.endDate())) {
+            throw new IllegalArgumentException("Vehicle is not available for the selected dates");
+        }
+
         AppUser appUser = getAuthenticatedUser();
 
         Reservation reservation = new Reservation();
@@ -46,5 +54,21 @@ public class ReservationServiceImpl {
 
     }
 
+
+    public boolean checkIfVehicleIsAvailable(List<Reservation> reservations , LocalDateTime startDate, LocalDateTime endDate) {
+        for (Reservation reservation : reservations) {
+            if (reservation.getStatus().equals(ReservationStatus.APPROVED) || reservation.getStatus().equals(ReservationStatus.PENDING)) {
+                if (startDate.isBefore(reservation.getEndDate()) && endDate.isAfter(reservation.getStartDate())) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    public List<Reservation> findAllByVehicleId(Long vehicleId) {
+        return reservationRepository.findAllByVehicleId(vehicleId);
+    }
 
 }
