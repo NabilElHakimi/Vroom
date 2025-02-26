@@ -7,6 +7,7 @@ import me.elhakimi.vroom.domain.Vehicle;
 import me.elhakimi.vroom.domain.enums.ReservationStatus;
 import me.elhakimi.vroom.dto.user.request.ReservationRequestDTO;
 import me.elhakimi.vroom.dto.user.response.ReservationResponseDTO;
+import me.elhakimi.vroom.exception.exceptions.ReservationException.VehicleNotAvailableException;
 import me.elhakimi.vroom.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class ReservationServiceImpl {
         List<Reservation> reservations = findAllByVehicleId(reservationDTO.vehicleId());
 
         if (!checkIfVehicleIsAvailable(reservations, reservationDTO.startDate(), reservationDTO.endDate())) {
-            throw new IllegalArgumentException("Vehicle is not available for the selected dates");
+            throw new VehicleNotAvailableException();
         }
 
         AppUser appUser = getAuthenticatedUser();
