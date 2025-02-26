@@ -47,7 +47,4 @@ public class LocationServiceImpl {
         return locationRepository.findByName(name);
     }
 
-
-
-
 }
