@@ -7,6 +7,9 @@ import me.elhakimi.vroom.domain.Vehicle;
 import me.elhakimi.vroom.domain.enums.ReservationStatus;
 import me.elhakimi.vroom.dto.user.request.ReservationRequestDTO;
 import me.elhakimi.vroom.dto.user.response.ReservationResponseDTO;
+import me.elhakimi.vroom.exception.exceptions.ReservationException.EndDateMustBeAfterStartDate;
+import me.elhakimi.vroom.exception.exceptions.ReservationException.ReservationMustBeAtLeastOneDay;
+import me.elhakimi.vroom.exception.exceptions.ReservationException.StartDateMustBeAfterCurrentDate;
 import me.elhakimi.vroom.exception.exceptions.ReservationException.VehicleNotAvailableException;
 import me.elhakimi.vroom.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,19 @@ public class ReservationServiceImpl {
     private final VehicleServiceImpl vehicleService;
 
     public ReservationResponseDTO save(ReservationRequestDTO reservationDTO) {
+
+
+        if (!checkDates(reservationDTO.startDate(), reservationDTO.endDate())) {
+            throw new EndDateMustBeAfterStartDate();
+        }
+
+        if (!checkDateIfValid(reservationDTO.startDate())) {
+            throw new StartDateMustBeAfterCurrentDate();
+        }
+
+        if (!checkDateIfHaveOneDayDifference(reservationDTO.startDate(), reservationDTO.endDate())) {
+            throw new ReservationMustBeAtLeastOneDay();
+        }
 
         Vehicle vehicle = vehicleService.findById(reservationDTO.vehicleId());
 
@@ -56,10 +72,10 @@ public class ReservationServiceImpl {
     }
 
 
-    public boolean checkIfVehicleIsAvailable(List<Reservation> reservations , LocalDateTime startDate, LocalDateTime endDate) {
+    private boolean checkIfVehicleIsAvailable(List<Reservation> reservations , LocalDateTime startDate, LocalDateTime endDate) {
         for (Reservation reservation : reservations) {
             if (reservation.getStatus().equals(ReservationStatus.APPROVED) || reservation.getStatus().equals(ReservationStatus.PENDING)) {
-                if (startDate.isBefore(reservation.getEndDate()) && endDate.isAfter(reservation.getStartDate())) {
+                if (startDate.isBefore(reservation.getEndDate().plusDays(1)) && endDate.isAfter(reservation.getStartDate())) {
                     return false;
                 }
             }
@@ -67,6 +83,18 @@ public class ReservationServiceImpl {
         return true;
     }
 
+
+    private boolean checkDates(LocalDateTime startDate, LocalDateTime endDate) {
+        return startDate.isBefore(endDate);
+    }
+
+    private boolean checkDateIfValid(LocalDateTime startDate) {
+        return startDate.isAfter(LocalDateTime.now().minusDays(1));
+    }
+
+    private boolean checkDateIfHaveOneDayDifference(LocalDateTime startDate, LocalDateTime endDate) {
+        return getDifferenceInDays(startDate, endDate) >= 1;
+    }
 
     public List<Reservation> findAllByVehicleId(Long vehicleId) {
         return reservationRepository.findAllByVehicleId(vehicleId);
