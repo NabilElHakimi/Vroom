@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface VehicleRepository extends JpaRepository<Vehicle , Long> {
 
-            @Query("SELECT v FROM Vehicle v LEFT JOIN FETCH v.vehicleImages ORDER BY v.createdAt DESC")
+            @Query("SELECT v FROM Vehicle v INNER JOIN  v.vehicleImages ORDER BY v.createdAt DESC")
             Page<Vehicle> findAllWithImages(Pageable pageable);
 
             @Query("SELECT v FROM Vehicle v LEFT JOIN FETCH v.vehicleImages WHERE v.id = :id")

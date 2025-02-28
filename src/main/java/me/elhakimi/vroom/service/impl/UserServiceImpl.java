@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         AppUser appUser = registerUserRequestMapper.toAppUser(user);
 
         Role role = new Role();
-        role.setName(TypeRole.USER);
+        role.setName(TypeRole.CLIENT);
         appUser.setRole(role);
 
         Random random = new Random();

@@ -4,6 +4,7 @@ package me.elhakimi.vroom.web.controllers.auth;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import me.elhakimi.vroom.dto.user.request.*;
 import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
@@ -102,9 +103,33 @@ public class AuthController {
 
 
     @PostMapping("/logout")
-    public void logout(@RequestParam String refreshToken){
+    public ResponseEntity<Map> logout(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = null;
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("refreshToken".equals(cookie.getName())) {
+                    refreshToken = cookie.getValue();
+                    // Remove the cookie by setting its maxAge to 0
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/"); // Ensure the path matches the original cookie
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
+        }
+
+        if (refreshToken == null) {
+            return new ResponseEntity<>(Map.of("message", "Refresh token not found"), HttpStatus.BAD_REQUEST);
+        }
+
         userService.logout(refreshToken);
+
+        return new ResponseEntity<>(Map.of("message", "Logout successful"), HttpStatus.OK);
+
     }
+
 
     @PostMapping("/change-password")
     public ResponseEntity<Object> changePassword(@RequestBody ChangePassword changePassword) {

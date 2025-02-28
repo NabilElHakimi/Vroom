@@ -1,4 +1,4 @@
-package me.elhakimi.vroom.web.controllers.admin;
+package me.elhakimi.vroom.web.controllers.vehicle;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -103,9 +103,12 @@ public class VehicleController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "9") int size) {
         PageRequest pageable = PageRequest.of(page-1, size);
+
         return ResponseEntity.ok(vehicleServiceImpl.findAll(pageable).map(
                 vehicle ->
-                        VehicleWithLocationResponseDTO.from(vehicle , UserDetailsResponseDTO.from(vehicle.getUser()) , VehicleImagesResponseDTO.from(vehicle.getVehicleImages()))));
+                        VehicleWithLocationResponseDTO.from(vehicle , UserDetailsResponseDTO.from(vehicle.getUser()) ,
+                                VehicleImagesResponseDTO.from(vehicle.getVehicleImages()))));
+
     }
 
 }
