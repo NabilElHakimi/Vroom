@@ -19,7 +19,7 @@ public record VehicleWithLocationResponseDTO(
         boolean isArchived,
         VehicleStatus status,
         List<VehicleImagesResponseDTO> articleImages,
-        UserDetailsResponseDTO userDetailsResponseDTO,
+        UserDetailsResponseDTO userDetails,
         List<Likes> likes,
         String city,
         FuelType fuelType,
