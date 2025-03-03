@@ -44,8 +44,8 @@ public class LocationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<LocationWithVehiclesResponseDTO>> findById(@PathVariable Long id){
-        return ResponseEntity.ok(List.of(locationService.findById(id)));
+    public ResponseEntity<LocationWithVehiclesResponseDTO> findById(@PathVariable Long id){
+        return ResponseEntity.ok(locationService.findById(id));
     }
 
 }
