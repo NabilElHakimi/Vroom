@@ -1,6 +1,8 @@
 package me.elhakimi.vroom.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,13 +22,29 @@ public class Location {
     @Column(nullable = false)
     private Long id;
 
+    @NotBlank(message = "The name must not be blank")
+    @NotEmpty(message = "The name must not be empty")
     private String name;
+
+    @NotBlank(message = "The address must not be blank")
+    @NotEmpty(message = "The address must not be empty")
     private String address;
+
+    @NotBlank(message = "The city must not be blank")
+    @NotEmpty(message = "The city must not be empty")
     private String city;
+
+    @NotBlank(message = "The telephone must not be blank")
+    @NotEmpty(message = "The telephone must not be empty")
     private String telephone;
+
+    @NotBlank(message = "The email must not be blank")
+    @NotEmpty(message = "The email must not be empty")
     private String email;
 
-    @OneToMany(mappedBy = "location" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
-    List<Vehicle> vehicles;
+    @ManyToOne
+    private AppUser user;
 
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Vehicle> vehicles;
 }

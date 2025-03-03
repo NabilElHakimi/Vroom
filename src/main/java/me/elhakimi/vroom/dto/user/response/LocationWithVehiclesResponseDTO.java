@@ -1,6 +1,10 @@
 package me.elhakimi.vroom.dto.user.response;
 
 import me.elhakimi.vroom.domain.Location;
+import me.elhakimi.vroom.domain.Vehicle;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public record LocationWithVehiclesResponseDTO(
         Long id,
@@ -8,10 +12,14 @@ public record LocationWithVehiclesResponseDTO(
         String address,
         String city,
         String telephone,
-        String email ,
-        VehicleWithOutLocationResponseDTO vehicles
+        String email,
+        List<VehicleWithOutLocationResponseDTO> vehicles
 ) {
     public static LocationWithVehiclesResponseDTO from(Location location) {
+        List<VehicleWithOutLocationResponseDTO> vehicleDTOs = location.getVehicles().stream()
+                .map(VehicleWithOutLocationResponseDTO::from)
+                .collect(Collectors.toList());
+
         return new LocationWithVehiclesResponseDTO(
                 location.getId(),
                 location.getName(),
@@ -19,7 +27,7 @@ public record LocationWithVehiclesResponseDTO(
                 location.getCity(),
                 location.getTelephone(),
                 location.getEmail(),
-                VehicleWithOutLocationResponseDTO.from(location.getVehicles())
+                vehicleDTOs
         );
     }
 }
