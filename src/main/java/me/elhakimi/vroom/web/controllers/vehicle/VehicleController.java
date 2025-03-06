@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/vehicles")
@@ -59,10 +60,10 @@ public class VehicleController {
             }
         }
 
-    @GetMapping("/archive/{id}")
-    public ResponseEntity<Object> archiveVehicle(@PathVariable Long id) {
+    @DeleteMapping("/archive/{id}")
+    public ResponseEntity<Map<String , String>> archiveVehicle(@PathVariable Long id) {
         vehicleServiceImpl.archive(id);
-        return ResponseEntity.ok("Vehicle archived successfully");
+        return ResponseEntity.ok(Map.of("message" , "Vehicle archived successfully"));
     }
 
     @GetMapping("/unArchive/{id}")

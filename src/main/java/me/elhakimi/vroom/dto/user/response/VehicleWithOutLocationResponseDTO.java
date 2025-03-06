@@ -20,7 +20,7 @@ package me.elhakimi.vroom.dto.user.response;
                 boolean isArchived,
                 VehicleStatus status,
                 List<VehicleImagesResponseDTO> articleImages,
-                UserDetailsResponseDTO user,
+                UserDetailsResponseDTO userDetails,
                 List<Likes> likes,
                 String city,
                 FuelType fuelType,

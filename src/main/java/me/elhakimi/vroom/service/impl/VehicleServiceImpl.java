@@ -153,7 +153,7 @@ public class VehicleServiceImpl {
 
     public Page<Vehicle> findAll(Pageable pageable) {
 
-        return vehicleRepository.findAll(pageable);
+        return vehicleRepository.findAllByIsArchivedIsFalse(pageable);
 
     }
 

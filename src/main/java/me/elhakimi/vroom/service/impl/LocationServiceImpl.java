@@ -3,6 +3,7 @@ package me.elhakimi.vroom.service.impl;
 import lombok.AllArgsConstructor;
 import me.elhakimi.vroom.domain.AppUser;
 import me.elhakimi.vroom.domain.Location;
+import me.elhakimi.vroom.domain.Vehicle;
 import me.elhakimi.vroom.dto.user.response.LocationWithVehiclesResponseDTO;
 import me.elhakimi.vroom.exception.exceptions.LocationExceptions.LocationAlreadyExistException;
 import me.elhakimi.vroom.exception.exceptions.LocationExceptions.LocationNotFoundException;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -33,6 +35,11 @@ public class LocationServiceImpl {
     public LocationWithVehiclesResponseDTO findById(Long id) {
         Location location = locationRepository.findById(id)
                 .orElseThrow(() -> new LocationNotFoundException("Location not found with id: " + id));
+
+        location.setVehicles(location.getVehicles().stream().filter(
+                v-> !v.isArchived())
+                .collect(Collectors.toList())) ;
+
         return LocationWithVehiclesResponseDTO.from(location);
     }
 

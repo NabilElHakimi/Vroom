@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import me.elhakimi.vroom.domain.AppUser;
 import me.elhakimi.vroom.dto.user.request.*;
 import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
 import me.elhakimi.vroom.security.JwtService;
@@ -70,8 +71,12 @@ public class AuthController {
 
             if (authenticate.isAuthenticated()) {
                 Map<String, String> tokens = jwtService.getRefreshTokenAndAccessToken(user.username(), response);
+                AppUser userDetails = (AppUser) authenticate.getPrincipal();
+                return Map.of("token", tokens.get("token") ,
+                        "username" , userDetails.getUsername() ,
+                        "role" , userDetails.getRole().getName().name()
+                );
 
-                return Map.of("token", tokens.get("token"));
             } else {
                 return Map.of("message", "Invalid credentials");
             }
