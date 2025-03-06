@@ -37,9 +37,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public RegisterUserResponseDTO register(@RequestBody RegisterUserRequestDTO user){
-
         return userService.save(user);
-
     }
 
     @PostMapping("/validate")

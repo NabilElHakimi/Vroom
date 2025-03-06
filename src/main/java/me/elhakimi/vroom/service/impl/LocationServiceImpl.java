@@ -3,11 +3,12 @@ package me.elhakimi.vroom.service.impl;
 import lombok.AllArgsConstructor;
 import me.elhakimi.vroom.domain.AppUser;
 import me.elhakimi.vroom.domain.Location;
-import me.elhakimi.vroom.domain.Vehicle;
+import me.elhakimi.vroom.domain.enums.TypeRole;
 import me.elhakimi.vroom.dto.user.response.LocationWithVehiclesResponseDTO;
 import me.elhakimi.vroom.exception.exceptions.LocationExceptions.LocationAlreadyExistException;
 import me.elhakimi.vroom.exception.exceptions.LocationExceptions.LocationNotFoundException;
 import me.elhakimi.vroom.repository.LocationRepository;
+import me.elhakimi.vroom.service.UserService;
 import me.elhakimi.vroom.utils.UserUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class LocationServiceImpl {
 
     private final LocationRepository locationRepository;
+    private final UserService userService;
 
     public Location save(Location location) {
 
@@ -28,6 +30,17 @@ public class LocationServiceImpl {
         if (checkLocation != null) {
                 throw new LocationAlreadyExistException(location.getName());
         }
+
+        AppUser user = UserUtil.getAuthenticatedUser();
+
+        if(user.getRole().getName().name().equals("CLIENT")){
+            user.getRole().setName(TypeRole.LEADER);
+            location.setUser(user);
+            userService.updateIn(user);
+        }
+
+        location.setUser(user);
+
 
         return locationRepository.save(location);
     }

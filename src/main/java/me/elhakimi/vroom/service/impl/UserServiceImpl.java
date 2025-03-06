@@ -89,6 +89,11 @@ public class UserServiceImpl implements UserService , UserDetailsService {
     }
 
     @Override
+    public AppUser updateIn(AppUser user) {
+        return userRepository.save(user);
+    }
+
+    @Override
     public AppUser saveRefreshToken(AppUser user) {
         System.out.println(user.getRefreshToken());
         return userRepository.save(user);
@@ -273,6 +278,7 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         managedUser.setImageUrl(imageSaved);
         return userRepository.save(managedUser);
     }
+
 
 
 

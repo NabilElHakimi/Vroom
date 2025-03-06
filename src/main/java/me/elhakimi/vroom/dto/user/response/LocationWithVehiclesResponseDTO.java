@@ -13,7 +13,8 @@ public record LocationWithVehiclesResponseDTO(
         String city,
         String telephone,
         String email,
-        List<VehicleWithOutLocationResponseDTO> vehicles
+        List<VehicleWithOutLocationResponseDTO> vehicles ,
+        UserDetailsResponseDTO user
 ) {
     public static LocationWithVehiclesResponseDTO from(Location location) {
         List<VehicleWithOutLocationResponseDTO> vehicleDTOs = location.getVehicles().stream()
@@ -27,7 +28,8 @@ public record LocationWithVehiclesResponseDTO(
                 location.getCity(),
                 location.getTelephone(),
                 location.getEmail(),
-                vehicleDTOs
+                vehicleDTOs ,
+                UserDetailsResponseDTO.from(location.getUser())
         );
     }
 }

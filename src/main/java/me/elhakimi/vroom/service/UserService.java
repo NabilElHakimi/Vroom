@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 public interface UserService  {
     RegisterUserResponseDTO save(RegisterUserRequestDTO user);
 
+    AppUser updateIn(AppUser user);
+
     String validateUser(UserValidationRequest validationRequest);
 
     void resendValidation(String username);
