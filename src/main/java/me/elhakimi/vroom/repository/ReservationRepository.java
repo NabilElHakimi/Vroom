@@ -18,12 +18,15 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "FROM reservation r " +
             "JOIN vehicle v ON r.vehicle_id = v.id " +
             "JOIN location l ON v.location_id = l.id " +
-            "WHERE l.id = :locationId",
+            "WHERE l.id = :locationId " +
+            "ORDER BY r.created_at DESC",
             countQuery = "SELECT COUNT(*) FROM reservation r " +
                     "JOIN vehicle v ON r.vehicle_id = v.id " +
                     "JOIN location l ON v.location_id = l.id " +
                     "WHERE l.id = :locationId",
             nativeQuery = true)
+
+
     Page<Reservation> findReservationsByLocation(@Param("locationId") Long locationId, Pageable pageable);
 
 }

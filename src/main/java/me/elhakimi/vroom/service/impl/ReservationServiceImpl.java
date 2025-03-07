@@ -120,7 +120,7 @@ public class ReservationServiceImpl {
 
         AppUser appUser = getAuthenticatedUser();
 
-        if (!reservation.getUser().getId().equals(appUser.getId())) {
+        if (!reservation.getVehicle().getLocation().getUser().getId().equals(appUser.getId())) {
             throw new IllegalArgumentException("You are not allowed to update this reservation");
         }
 
