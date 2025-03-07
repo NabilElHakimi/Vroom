@@ -27,7 +27,6 @@ public record ReservationResponseDTO(
                 reservation.getTotalPrice(),
                 reservation.getStatus()
         );
-
     }
 
 

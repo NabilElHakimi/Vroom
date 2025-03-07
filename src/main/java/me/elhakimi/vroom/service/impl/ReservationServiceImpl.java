@@ -12,6 +12,8 @@ import me.elhakimi.vroom.exception.exceptions.ReservationException.ReservationMu
 import me.elhakimi.vroom.exception.exceptions.ReservationException.StartDateMustBeAfterCurrentDate;
 import me.elhakimi.vroom.exception.exceptions.ReservationException.VehicleNotAvailableException;
 import me.elhakimi.vroom.repository.ReservationRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -100,4 +102,33 @@ public class ReservationServiceImpl {
         return reservationRepository.findAllByVehicleId(vehicleId);
     }
 
+    public Page<ReservationResponseDTO> findByLocationId(Long id, Pageable pageable) {
+        return reservationRepository.findReservationsByLocation(id, pageable)
+                .map(ReservationResponseDTO::from);
+    }
+
+    public ReservationResponseDTO updateStatus(Long id, String status) {
+
+        Reservation reservation = reservationRepository.findById(id).orElse(null);
+        if (reservation == null) {
+            throw new IllegalArgumentException("Reservation not found");
+        }
+
+       if(reservation.getStatus().equals(ReservationStatus.valueOf(status))) {
+           throw new IllegalArgumentException("Reservation already in this status");
+       }
+
+        AppUser appUser = getAuthenticatedUser();
+
+        if (!reservation.getUser().getId().equals(appUser.getId())) {
+            throw new IllegalArgumentException("You are not allowed to update this reservation");
+        }
+
+
+        reservation.setStatus(ReservationStatus.valueOf(status));
+
+        return ReservationResponseDTO.from(reservationRepository.save(reservation));
+
+
+    }
 }
