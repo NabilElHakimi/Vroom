@@ -20,7 +20,7 @@ spring:
     hibernate:
       ddl-auto: update
   liquibase:
-    enabled: false
+    enabled: true
     change-log: db/changelog/master.yaml
   docker:
     compose:

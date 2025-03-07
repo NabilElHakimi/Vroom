@@ -1,0 +1,455 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1741390248453-1
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: likes_seq
+            startValue: 1
+  - changeSet:
+      id: 1741390248453-2
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: location_seq
+            startValue: 1
+  - changeSet:
+      id: 1741390248453-3
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: reservation_seq
+            startValue: 1
+  - changeSet:
+      id: 1741390248453-4
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: role_seq
+            startValue: 1
+  - changeSet:
+      id: 1741390248453-5
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: user_seq
+            startValue: 1
+  - changeSet:
+      id: 1741390248453-6
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: vehicle_images_seq
+            startValue: 1
+  - changeSet:
+      id: 1741390248453-7
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: vehicle_seq
+            startValue: 1
+  - changeSet:
+      id: 1741390248453-8
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: likes_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: vehicle_id
+                  type: BIGINT
+            tableName: likes
+  - changeSet:
+      id: 1741390248453-9
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: location_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: address
+                  type: VARCHAR(255)
+              - column:
+                  name: city
+                  type: VARCHAR(255)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: telephone
+                  type: VARCHAR(255)
+              - column:
+                  name: user_id
+                  type: BIGINT
+            tableName: location
+  - changeSet:
+      id: 1741390248453-10
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: reservation_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: end_date
+                  type: timestamp
+              - column:
+                  name: start_date
+                  type: timestamp
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: total_price
+                  type: DOUBLE precision
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: vehicle_id
+                  type: BIGINT
+            tableName: reservation
+  - changeSet:
+      id: 1741390248453-11
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: role_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+            tableName: role
+  - changeSet:
+      id: 1741390248453-12
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: user_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: actif
+                  type: BOOLEAN
+              - column:
+                  name: activation_code
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: expires_at
+                  type: timestamp
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: image_url
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_used_code
+                  type: BOOLEAN
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: refresh_token
+                  type: VARCHAR(255)
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+              - column:
+                  name: role_id
+                  type: BIGINT
+            tableName: user
+  - changeSet:
+      id: 1741390248453-13
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: vehicle_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: city
+                  type: VARCHAR(255)
+              - column:
+                  name: code_car
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: description
+                  type: CLOB
+              - column:
+                  name: fuel_type
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_archived
+                  type: BOOLEAN
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_published
+                  type: BOOLEAN
+              - column:
+                  name: mark
+                  type: VARCHAR(255)
+              - column:
+                  name: model
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: price
+                  type: DOUBLE precision
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: telephone
+                  type: VARCHAR(255)
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  constraints:
+                    nullable: false
+                  name: year
+                  type: INT
+              - column:
+                  name: location_id
+                  type: BIGINT
+              - column:
+                  name: user_id
+                  type: BIGINT
+            tableName: vehicle
+  - changeSet:
+      id: 1741390248453-14
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: vehicle_images_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: image_url
+                  type: VARCHAR(255)
+              - column:
+                  name: vehicle_id
+                  type: BIGINT
+            tableName: vehicle_images
+  - changeSet:
+      id: 1741390248453-15
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: role_id
+            constraintName: uks6aalnvk8m3fdmp9791g6cbbm
+            tableName: user
+  - changeSet:
+      id: 1741390248453-16
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: vehicle_id
+            baseTableName: vehicle_images
+            constraintName: fk25kk8iwfofjgal1o383q7sqw1
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: vehicle
+  - changeSet:
+      id: 1741390248453-17
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: vehicle
+            constraintName: fk6nybrllcwxx8tag3nji5ylomg
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: user
+  - changeSet:
+      id: 1741390248453-18
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: vehicle_id
+            baseTableName: likes
+            constraintName: fk8tj5lqr5pi887w2t3frne6j0i
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: vehicle
+  - changeSet:
+      id: 1741390248453-19
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: reservation
+            constraintName: fka4ibleq81op3r57bis3rrfqrb
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: user
+  - changeSet:
+      id: 1741390248453-20
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: location
+            constraintName: fkaehfg4ynpsflko37dstpeptas
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: user
+  - changeSet:
+      id: 1741390248453-21
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: likes
+            constraintName: fkao5y57uob4cd4fpv53m3jd0qy
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: user
+  - changeSet:
+      id: 1741390248453-22
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: user
+            constraintName: fkdl9dqp078pc03g6kdnxmnlqpc
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: role
+  - changeSet:
+      id: 1741390248453-23
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: location_id
+            baseTableName: vehicle
+            constraintName: fkn44dl6cxj7t5neb7lj8n54a0y
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: location
+  - changeSet:
+      id: 1741390248453-24
+      author: Youcode
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: vehicle_id
+            baseTableName: reservation
+            constraintName: fkrm327sr0rb11mme0kbsm37od5
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: vehicle
+
