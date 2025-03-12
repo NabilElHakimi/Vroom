@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 
 @Entity
@@ -36,6 +37,9 @@ public class AppUser implements UserDetails {
     private Instant createdAt ;
     private Instant expiresAt  ;
     private String refreshToken;
+
+    @OneToMany(mappedBy = "user" , fetch = FetchType.EAGER)
+    private List<Reservation> reservations;
 
     @Nullable
     private String imageUrl = null;
@@ -77,6 +81,7 @@ public class AppUser implements UserDetails {
     public boolean isEnabled() {
         return this.actif;
     }
+
 
 }
 

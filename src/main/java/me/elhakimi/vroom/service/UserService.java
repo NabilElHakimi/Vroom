@@ -5,6 +5,7 @@ import me.elhakimi.vroom.dto.user.request.ChangePassword;
 import me.elhakimi.vroom.dto.user.request.RegisterUserRequestDTO;
 import me.elhakimi.vroom.dto.user.request.RestPassword;
 import me.elhakimi.vroom.dto.user.request.UserValidationRequest;
+import me.elhakimi.vroom.dto.user.response.ProfileResponseDTO;
 import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,5 +36,7 @@ public interface UserService  {
     boolean resetPassword(RestPassword restPassword);
 
     AppUser addImage(MultipartFile imageUrl , String username);
+
+    ProfileResponseDTO getProfile(String username);
 
 }

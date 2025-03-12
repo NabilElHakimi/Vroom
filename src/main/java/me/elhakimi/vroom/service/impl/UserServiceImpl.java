@@ -10,12 +10,16 @@ import me.elhakimi.vroom.dto.user.request.RegisterUserRequestDTO;
 import me.elhakimi.vroom.dto.user.request.RestPassword;
 import me.elhakimi.vroom.dto.user.request.UserValidationRequest;
 import me.elhakimi.vroom.dto.user.request.mapper.RegisterUserRequestMapper;
+import me.elhakimi.vroom.dto.user.response.ProfileResponseDTO;
 import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
+import me.elhakimi.vroom.dto.user.response.ReservationResponseDTO;
+import me.elhakimi.vroom.dto.user.response.UserDetailsResponseDTO;
 import me.elhakimi.vroom.dto.user.response.mapper.RegisterUserResponseMapper;
 import me.elhakimi.vroom.exception.exceptions.UserValidationException;
 import me.elhakimi.vroom.repository.UserRepository;
 import me.elhakimi.vroom.service.UserService;
 import me.elhakimi.vroom.utils.EmailSenderUtil;
+import me.elhakimi.vroom.utils.UserUtil;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,8 +30,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Random;
-
 
 @Service
 @AllArgsConstructor
@@ -279,8 +283,28 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         return userRepository.save(managedUser);
     }
 
+    @Override
+    public ProfileResponseDTO getProfile(String username) {
+        AppUser user = userRepository.findAppUsersByUsername(username);
+        AppUser userAuth = UserUtil.getAuthenticatedUser();
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+        if(!userAuth.getUsername().equals(user.getUsername())){
+            throw new IllegalArgumentException("You are not allowed to view this profile");
+        }
 
+        UserDetailsResponseDTO userDetailsResponseDTO = UserDetailsResponseDTO.from(user);
 
+        List<ReservationResponseDTO> reservationResponseDTO = user.getReservations().stream()
+                .map(ReservationResponseDTO::from)
+                .toList();
+
+        return new ProfileResponseDTO(userDetailsResponseDTO ,
+                user.getImageUrl() ,
+                reservationResponseDTO
+                );
+    }
 
 
 }

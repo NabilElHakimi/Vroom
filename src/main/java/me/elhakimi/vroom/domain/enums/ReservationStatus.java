@@ -5,6 +5,7 @@ public enum ReservationStatus {
     CANCELLED,
     APPROVED,
     COMPLETED,
+    CAR_IN_USE,
     REJECTED
 
 }
