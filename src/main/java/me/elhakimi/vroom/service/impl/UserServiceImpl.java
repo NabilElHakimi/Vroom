@@ -1,6 +1,7 @@
 package me.elhakimi.vroom.service.impl;
 
 import lombok.AllArgsConstructor;
+import me.elhakimi.vroom.aws.service.StorageService;
 import me.elhakimi.vroom.domain.AppUser;
 import me.elhakimi.vroom.domain.Role;
 import me.elhakimi.vroom.domain.enums.TypeRole;
@@ -9,19 +10,28 @@ import me.elhakimi.vroom.dto.user.request.RegisterUserRequestDTO;
 import me.elhakimi.vroom.dto.user.request.RestPassword;
 import me.elhakimi.vroom.dto.user.request.UserValidationRequest;
 import me.elhakimi.vroom.dto.user.request.mapper.RegisterUserRequestMapper;
+import me.elhakimi.vroom.dto.user.response.ProfileResponseDTO;
 import me.elhakimi.vroom.dto.user.response.RegisterUserResponseDTO;
+import me.elhakimi.vroom.dto.user.response.ReservationResponseDTO;
+import me.elhakimi.vroom.dto.user.response.UserDetailsResponseDTO;
 import me.elhakimi.vroom.dto.user.response.mapper.RegisterUserResponseMapper;
+import me.elhakimi.vroom.exception.exceptions.UserValidationException;
 import me.elhakimi.vroom.repository.UserRepository;
 import me.elhakimi.vroom.service.UserService;
 import me.elhakimi.vroom.utils.EmailSenderUtil;
+import me.elhakimi.vroom.utils.UserUtil;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Random;
-
 
 @Service
 @AllArgsConstructor
@@ -32,6 +42,8 @@ public class UserServiceImpl implements UserService , UserDetailsService {
     private final RegisterUserResponseMapper registerUserResponseMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final EmailSenderUtil emailSenderUtil;
+    private final StringHttpMessageConverter stringHttpMessageConverter;
+    private final StorageService storageService;
 
     @Override
     public AppUser loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -64,7 +76,7 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         AppUser appUser = registerUserRequestMapper.toAppUser(user);
 
         Role role = new Role();
-        role.setName(TypeRole.USER);
+        role.setName(TypeRole.CLIENT);
         appUser.setRole(role);
 
         Random random = new Random();
@@ -78,6 +90,11 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         sendActivationEmail(appUser);
 
         return registerUserResponseMapper.toRegisterResponseUserDTO(appUser);
+    }
+
+    @Override
+    public AppUser updateIn(AppUser user) {
+        return userRepository.save(user);
     }
 
     @Override
@@ -97,7 +114,6 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         user.setRefreshToken(null);
         userRepository.save(user);
     }
-
 
     @Override
     public boolean changePassword(ChangePassword changePassword) {
@@ -174,12 +190,12 @@ public class UserServiceImpl implements UserService , UserDetailsService {
     @Override
     public void resendValidation(String username) {
         AppUser user = userRepository.findAppUsersByUsername(username);
-        if(user == null){
-            throw new IllegalArgumentException("Invalid username");
+        if (user == null) {
+            throw new UserValidationException("Invalid username");
         }
 
-        if(user.isActif()){
-            throw new IllegalArgumentException("User already activated Try with login");
+        if (user.isActif()) {
+            throw new UserValidationException("User already activated. Try with login.");
         }
 
         Random random = new Random();
@@ -193,6 +209,7 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         sendActivationEmail(user);
     }
 
+
     public void sendActivationEmail(AppUser user) {
         {
             emailSenderUtil.sendActivationEmail(
@@ -203,27 +220,91 @@ public class UserServiceImpl implements UserService , UserDetailsService {
         }
     }
 
-    public void validateUser(UserValidationRequest validationRequest) {
+    public String validateUser(UserValidationRequest validationRequest) {
 
         AppUser user = userRepository.findAppUsersByActivationCode(validationRequest.getCode());
         if (user == null) {
-            throw new IllegalArgumentException("Invalid code");
+            return "Invalid code";
         }
         if (user.isUsedCode()) {
-            throw new IllegalArgumentException("Code already used");
+                return  "Code already used";
         }
         if (user.getExpiresAt().isBefore(Instant.now())) {
-            throw new IllegalArgumentException("Code expired");
+             return "Code expired";
         }
 
         if(!user.getUsername().equals(validationRequest.getUsername())){
-            throw new IllegalArgumentException("Invalid username");
+            return "Invalid username";
         }
 
         user.setActif(true);
         user.setUsedCode(true);
         this.userRepository.save(user);
+        return "Account activated successfully";
 
     }
+
+
+    @Override
+    public AppUser addImage(MultipartFile imageUrl, String username) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("User is not authenticated.");
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof AppUser)) {
+            throw new SecurityException("Invalid user authentication.");
+        }
+        AppUser user = (AppUser) principal;
+
+        if (!user.getUsername().equals(username)) {
+            throw new SecurityException("You are not allowed to update this user.");
+        }
+
+        if (imageUrl.getSize() > 5 * 1024 * 1024) {
+            throw new IllegalArgumentException("Image size exceeds the maximum allowed size of 5MB.");
+        }
+
+        String contentType = imageUrl.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new IllegalArgumentException("Only image files are allowed.");
+        }
+
+        System.out.println("Image size: " + imageUrl.getSize());
+        System.out.println("Username: " + user.getUsername());
+
+        String imageSaved = storageService.uploadFile(imageUrl, user.getUsername());
+
+        AppUser managedUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        managedUser.setImageUrl(imageSaved);
+        return userRepository.save(managedUser);
+    }
+
+    @Override
+    public ProfileResponseDTO getProfile(String username) {
+        AppUser user = userRepository.findAppUsersByUsername(username);
+        AppUser userAuth = UserUtil.getAuthenticatedUser();
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+        if(!userAuth.getUsername().equals(user.getUsername())){
+            throw new IllegalArgumentException("You are not allowed to view this profile");
+        }
+
+        UserDetailsResponseDTO userDetailsResponseDTO = UserDetailsResponseDTO.from(user);
+
+        List<ReservationResponseDTO> reservationResponseDTO = user.getReservations().stream()
+                .map(ReservationResponseDTO::from)
+                .toList();
+
+        return new ProfileResponseDTO(userDetailsResponseDTO ,
+                user.getImageUrl() ,
+                reservationResponseDTO
+                );
+    }
+
 
 }

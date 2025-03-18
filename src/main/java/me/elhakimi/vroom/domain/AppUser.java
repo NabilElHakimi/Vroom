@@ -1,5 +1,6 @@
 package me.elhakimi.vroom.domain;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.UniqueElements;
@@ -10,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+
 
 @Entity
 @NoArgsConstructor
@@ -34,6 +37,12 @@ public class AppUser implements UserDetails {
     private Instant createdAt ;
     private Instant expiresAt  ;
     private String refreshToken;
+
+    @OneToMany(mappedBy = "user" , fetch = FetchType.EAGER)
+    private List<Reservation> reservations;
+
+    @Nullable
+    private String imageUrl = null;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Role role;
@@ -72,6 +81,7 @@ public class AppUser implements UserDetails {
     public boolean isEnabled() {
         return this.actif;
     }
+
 
 }
 
