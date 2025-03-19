@@ -131,4 +131,14 @@ public class ReservationServiceImpl {
 
 
     }
+
+
+    public List<ReservationResponseDTO> findAllByVehicle_IdAndStartDateAfter(Long vehicleId) {
+        return reservationRepository.findAllByVehicle_IdAndStartDateAfter(vehicleId, LocalDateTime.now())
+                .stream()
+                .map(ReservationResponseDTO::from)
+                .toList();
+    }
+
+
 }

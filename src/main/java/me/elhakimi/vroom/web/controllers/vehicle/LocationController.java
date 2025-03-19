@@ -23,8 +23,10 @@ public class LocationController {
 
 
     @PostMapping
-    public ResponseEntity<Location> save(@Valid @RequestBody Location location ){
-        return ResponseEntity.ok(locationService.save(location));
+    public ResponseEntity<LocationWithoutVehicleResponseDTO> save(@Valid @RequestBody Location location ){
+        Location locationSaved = locationService.save(location);
+        LocationWithoutVehicleResponseDTO responseDTO = LocationWithoutVehicleResponseDTO.from(locationSaved);
+        return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping("/findAll")

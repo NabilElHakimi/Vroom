@@ -54,4 +54,14 @@ public class ReservationController {
         }
     }
 
+    @GetMapping("/get-by-vehicle/{id}")
+    public ResponseEntity<?> getReservationByVehicleId(@PathVariable Long id) {
+        List<ReservationResponseDTO> reservation = reservationServiceImpl.findAllByVehicle_IdAndStartDateAfter(id);
+        if (reservation != null) {
+            return ResponseEntity.ok(reservation);
+        } else {
+            return ResponseEntity.badRequest().body("Reservation not found.");
+        }
+    }
+
 }
