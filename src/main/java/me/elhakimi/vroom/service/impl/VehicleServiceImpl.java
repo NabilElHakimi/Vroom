@@ -11,26 +11,25 @@ import me.elhakimi.vroom.domain.enums.VehicleStatus;
 import me.elhakimi.vroom.dto.user.request.VehicleWithLocationRequestDTO;
 import me.elhakimi.vroom.repository.VehicleRepository;
 import me.elhakimi.vroom.service.UserService;
+import me.elhakimi.vroom.service.VehicleImagesService;
+import me.elhakimi.vroom.service.VehicleService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import static me.elhakimi.vroom.utils.UserUtil.getAuthenticatedUser;
 
 @Service
 @AllArgsConstructor
-public class VehicleServiceImpl {
+public class VehicleServiceImpl implements VehicleService {
 
     private final VehicleRepository vehicleRepository;
-    private final UserService userService;
-    private final VehicleImagesServiceImpl vehicleImagesServiceImpl;
+    private final VehicleImagesService vehicleImagesServiceImpl;
     private final StorageService storageService;
 
     @Transactional

@@ -9,6 +9,7 @@ import me.elhakimi.vroom.exception.exceptions.LocationExceptions.LocationAlready
 import me.elhakimi.vroom.exception.exceptions.LocationExceptions.LocationNotFoundException;
 import me.elhakimi.vroom.exception.exceptions.LocationExceptions.YouCantCreateMore;
 import me.elhakimi.vroom.repository.LocationRepository;
+import me.elhakimi.vroom.service.LocationService;
 import me.elhakimi.vroom.service.UserService;
 import me.elhakimi.vroom.utils.UserUtil;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
-public class LocationServiceImpl {
+public class LocationServiceImpl implements LocationService {
 
     private final LocationRepository locationRepository;
     private final UserService userService;

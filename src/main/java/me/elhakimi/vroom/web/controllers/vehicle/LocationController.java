@@ -5,12 +5,11 @@ import lombok.AllArgsConstructor;
 import me.elhakimi.vroom.domain.Location;
 import me.elhakimi.vroom.dto.user.response.LocationWithVehiclesResponseDTO;
 import me.elhakimi.vroom.dto.user.response.LocationWithoutVehicleResponseDTO;
-import me.elhakimi.vroom.service.impl.LocationServiceImpl;
+import me.elhakimi.vroom.service.LocationService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class LocationController {
 
-    private final LocationServiceImpl locationService ;
+    private final LocationService locationService ;
 
 
     @PostMapping

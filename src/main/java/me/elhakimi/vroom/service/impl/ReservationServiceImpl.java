@@ -12,6 +12,7 @@ import me.elhakimi.vroom.exception.exceptions.ReservationException.ReservationMu
 import me.elhakimi.vroom.exception.exceptions.ReservationException.StartDateMustBeAfterCurrentDate;
 import me.elhakimi.vroom.exception.exceptions.ReservationException.VehicleNotAvailableException;
 import me.elhakimi.vroom.repository.ReservationRepository;
+import me.elhakimi.vroom.service.ReservationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import static me.elhakimi.vroom.utils.UserUtil.getAuthenticatedUser;
 
 @Service
 @AllArgsConstructor
-public class ReservationServiceImpl {
+public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final VehicleServiceImpl vehicleService;

@@ -1,17 +1,15 @@
 package me.elhakimi.vroom.web.controllers.vehicle;
 
 import lombok.AllArgsConstructor;
-import me.elhakimi.vroom.domain.Reservation;
 import me.elhakimi.vroom.dto.user.request.ReservationRequestDTO;
 import me.elhakimi.vroom.dto.user.response.ReservationResponseDTO;
+import me.elhakimi.vroom.service.ReservationService;
 import me.elhakimi.vroom.service.impl.ReservationServiceImpl;
-import org.apache.catalina.connector.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -19,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ReservationController {
 
-    private final ReservationServiceImpl reservationServiceImpl;
+    private final ReservationService reservationServiceImpl;
 
     @PostMapping
     public ResponseEntity<?> addReservation(@RequestBody ReservationRequestDTO reservation) {
