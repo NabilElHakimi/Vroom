@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Activation Email</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 12px;
+            background-color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .header {
+            color: #ef4444; /* red-500 */
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .content {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .code {
+            display: inline-block;
+            padding: 14px 28px;
+            background-color: #fef2f2; /* red-50 */
+            color: #ef4444; /* red-500 */
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 8px;
+            margin: 20px 0;
+            letter-spacing: 2px;
+        }
+        .footer {
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2 class="header">Welcome to Vroom!</h2>
+    <div class="content">
+        <p>Dear <span th:text="${name}">User</span>,</p>
+        <p>Thank you for registering with us. Please use the following activation code to activate your account:</p>
+        <p><strong>Activation Code:</strong></p>
+        <div class="code" th:text="${activationCode}">123456</div>
+        <p>If you did not request this, please ignore this email.</p>
+    </div>
+    <div class="footer">
+        <p>Best regards,</p>
+        <p>The Vroom Team</p>
+    </div>
+</div>
+</body>
+</html>

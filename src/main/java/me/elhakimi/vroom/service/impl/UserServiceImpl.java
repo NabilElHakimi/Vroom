@@ -211,13 +211,12 @@ public class UserServiceImpl implements UserService , UserDetailsService {
 
 
     public void sendActivationEmail(AppUser user) {
-        {
-            emailSenderUtil.sendActivationEmail(
-                    user.getEmail() ,
-                    "Vroom Account Activation" ,
-                    "Your activation code is : " + user.getActivationCode()
-            );
-        }
+        emailSenderUtil.sendActivationEmail(
+                user.getEmail(), // to
+                "Vroom Account Activation", // subject
+                user.getUsername(), // name
+                user.getActivationCode() // activation code
+        );
     }
 
     public String validateUser(UserValidationRequest validationRequest) {

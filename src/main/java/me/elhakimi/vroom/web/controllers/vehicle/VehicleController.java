@@ -8,7 +8,7 @@ import me.elhakimi.vroom.dto.user.request.VehicleWithLocationRequestDTO;
 import me.elhakimi.vroom.dto.user.response.UserDetailsResponseDTO;
 import me.elhakimi.vroom.dto.user.response.VehicleImagesResponseDTO;
 import me.elhakimi.vroom.dto.user.response.VehicleWithLocationResponseDTO;
-import me.elhakimi.vroom.service.impl.VehicleServiceImpl;
+import me.elhakimi.vroom.service.VehicleService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +22,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class VehicleController {
 
-    private final VehicleServiceImpl vehicleServiceImpl;
+    private final VehicleService vehicleServiceImpl;
 
     @PostMapping
     public ResponseEntity<Object> addVehicle(

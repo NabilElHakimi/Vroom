@@ -7,7 +7,9 @@ import me.elhakimi.vroom.domain.enums.TypeRole;
 import me.elhakimi.vroom.dto.user.response.LocationWithVehiclesResponseDTO;
 import me.elhakimi.vroom.exception.exceptions.LocationExceptions.LocationAlreadyExistException;
 import me.elhakimi.vroom.exception.exceptions.LocationExceptions.LocationNotFoundException;
+import me.elhakimi.vroom.exception.exceptions.LocationExceptions.YouCantCreateMore;
 import me.elhakimi.vroom.repository.LocationRepository;
+import me.elhakimi.vroom.service.LocationService;
 import me.elhakimi.vroom.service.UserService;
 import me.elhakimi.vroom.utils.UserUtil;
 import org.springframework.data.domain.Page;
@@ -19,17 +21,25 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
-public class LocationServiceImpl {
+public class LocationServiceImpl implements LocationService {
 
     private final LocationRepository locationRepository;
     private final UserService userService;
 
     public Location save(Location location) {
 
-        Location checkLocation = locationRepository.findByName(location.getName());
-        if (checkLocation != null) {
-                throw new LocationAlreadyExistException(location.getName());
+
+        List<Location> locations = locationRepository.findAll();
+
+        if(locations.size() > 3){
+            throw new YouCantCreateMore("You can't create more than 4 locations");
         }
+
+        locations.forEach(lo -> {
+            if (lo.getName().equals(location.getName())) {
+                throw new LocationAlreadyExistException(location.getName());
+            }
+        });
 
         AppUser user = UserUtil.getAuthenticatedUser();
 
@@ -40,7 +50,6 @@ public class LocationServiceImpl {
         }
 
         location.setUser(user);
-
 
         return locationRepository.save(location);
     }
