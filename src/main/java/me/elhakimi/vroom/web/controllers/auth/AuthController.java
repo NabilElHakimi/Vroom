@@ -42,6 +42,7 @@ public class AuthController {
 
     @PostMapping("/validate")
     public ResponseEntity<Map<String, String>> validate(@RequestBody UserValidationRequest userValidationRequest) {
+        String mes = "hellooo";
         String message = userService.validateUser(userValidationRequest);
         Map<String, String> response = Map.of("message", message);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -57,7 +58,6 @@ public class AuthController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
 
     @PostMapping("/login")
